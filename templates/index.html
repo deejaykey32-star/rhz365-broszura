@@ -102,21 +102,27 @@
       gap: 6px;
     }
 
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-color);
+    }
+
     .presets-grid {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr;
       gap: 8px;
       margin-bottom: 18px;
     }
 
     .preset-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1.5px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
       padding: 9px 12px;
-      color: #ffffff;
-      text-align: left;
       cursor: pointer;
+      text-align: left;
       transition: all 0.2s ease;
       display: flex;
       justify-content: space-between;
@@ -129,46 +135,49 @@
     }
 
     .preset-btn.active {
-      background: rgba(212, 175, 55, 0.18);
-      border-color: var(--gold);
-      box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(212, 175, 55, 0.08) 100%);
+      border: 1.5px solid var(--gold);
     }
 
     .preset-title {
-      font-weight: 600;
-      font-size: 8.8pt;
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 2px;
     }
 
     .preset-desc {
       font-size: 7.2pt;
       color: var(--text-muted);
-      margin-top: 2px;
     }
 
     .badge-kdp {
-      background: #f97316;
-      color: #fff;
+      background: #f59e0b;
+      color: #000000;
       font-size: 6.5pt;
-      font-weight: 700;
+      font-weight: 800;
       padding: 2px 6px;
       border-radius: 4px;
+      text-transform: uppercase;
     }
 
     .badge-local {
-      background: #10b981;
-      color: #fff;
+      background: #3b82f6;
+      color: #ffffff;
       font-size: 6.5pt;
-      font-weight: 700;
+      font-weight: 800;
       padding: 2px 6px;
       border-radius: 4px;
+      text-transform: uppercase;
     }
 
+    /* Form Controls */
     .control-group {
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .control-label {
-      font-size: 8pt;
+      font-size: 7.8pt;
       color: var(--text-muted);
       margin-bottom: 5px;
       display: flex;
@@ -179,15 +188,15 @@
       width: 100%;
       background: #0f172a;
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
       color: #ffffff;
       padding: 7px 10px;
-      font-size: 8.5pt;
-      font-family: inherit;
+      border-radius: 5px;
+      font-size: 8.2pt;
+      outline: none;
+      transition: border 0.2s;
     }
 
     select:focus, input[type="text"]:focus {
-      outline: none;
       border-color: var(--gold);
     }
 
@@ -195,90 +204,92 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 8pt;
+      font-size: 7.8pt;
       color: #e2e8f0;
-      cursor: pointer;
       margin-top: 8px;
+      cursor: pointer;
     }
 
     .checkbox-row input {
       accent-color: var(--gold);
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
     }
 
     /* Specs info box */
     .specs-box {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px dashed var(--border-color);
       border-radius: 6px;
-      padding: 10px 12px;
-      font-size: 7.4pt;
+      padding: 10px;
+      margin-top: 14px;
+      font-size: 7.5pt;
       line-height: 1.5;
-      margin: 14px 0;
     }
 
     .specs-row {
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px dashed rgba(255,255,255,0.08);
-      padding: 2px 0;
+      margin-bottom: 3px;
     }
 
     /* Action Buttons */
     .action-buttons {
       display: flex;
       flex-direction: column;
-      gap: 9px;
-      margin-top: 10px;
+      gap: 7px;
+      margin-top: 16px;
     }
 
     .btn-action {
-      background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+      background: linear-gradient(135deg, #aa8214 0%, #d4af37 100%);
       color: #ffffff;
       border: none;
-      border-radius: 6px;
       padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 8.4pt;
       font-weight: 700;
-      font-size: 8.5pt;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(184, 147, 38, 0.25);
+      transition: transform 0.1s, opacity 0.2s;
+      text-decoration: none;
     }
 
     .btn-action:hover {
-      filter: brightness(1.1);
+      opacity: 0.95;
       transform: translateY(-1px);
     }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.08);
-      color: #ffffff;
-      border: 1px solid rgba(255,255,255,0.2);
-      box-shadow: none;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: var(--gold-light);
     }
 
     .btn-secondary:hover {
-      background: rgba(255,255,255,0.14);
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
     }
 
-    /* Preview Canvas Area */
+    .btn-print {
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      color: #ffffff;
+    }
+
+    /* Preview Area */
     .preview-area {
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: #131b28;
+      background: #090d16;
       overflow: hidden;
     }
 
     .preview-toolbar {
-      background: #182234;
+      background: #111827;
       border-bottom: 1px solid var(--border-color);
       padding: 8px 18px;
       display: flex;
@@ -288,15 +299,15 @@
 
     .preview-tabs {
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
 
     .tab-btn {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 5px;
+      color: #cbd5e1;
       padding: 5px 12px;
-      color: var(--text-muted);
+      border-radius: 4px;
       font-size: 8pt;
       font-weight: 600;
       cursor: pointer;
@@ -314,7 +325,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 15px;
       overflow: auto;
       background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
     }
@@ -326,7 +337,7 @@
       background: transparent;
     }
 
-    /* Modal / Alert */
+    /* Toast notification */
     .status-toast {
       position: fixed;
       bottom: 20px;
@@ -360,7 +371,7 @@
     </div>
     <div>
       <span style="font-size: 7.5pt; color: var(--gold); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 20px;">
-        widokinaraj.pl &bull; Wersja v2.0
+        widokinaraj.pl &bull; Cloudflare Pages v2.0
       </span>
     </div>
   </header>
@@ -374,17 +385,44 @@
         <div class="section-label">Wybór Profilu Wydawniczego</div>
         
         <div class="presets-grid">
-          <!-- Preset 1: Druk Lokalny 16 stron -->
-          <div class="preset-btn active" onclick="setPreset('local_16')">
+          <!-- Preset 1: 4 strony -->
+          <div class="preset-btn" id="btn-local_4" onclick="setPreset('local_4')">
+            <div>
+              <div class="preset-title">Folder / Ulotka (4 strony)</div>
+              <div class="preset-desc">Format składany A5, ultra-zwarty przewodnik</div>
+            </div>
+            <span class="badge-local">4 str.</span>
+          </div>
+
+          <!-- Preset 2: 8 stron -->
+          <div class="preset-btn" id="btn-local_8" onclick="setPreset('local_8')">
+            <div>
+              <div class="preset-title">Zwarta Broszura (8 stron)</div>
+              <div class="preset-desc">Zwięzły przewodnik po dziele i 6 różańcach</div>
+            </div>
+            <span class="badge-local">8 str.</span>
+          </div>
+
+          <!-- Preset 3: 12 stron -->
+          <div class="preset-btn" id="btn-local_12" onclick="setPreset('local_12')">
+            <div>
+              <div class="preset-title">Pośrednia Broszura (12 stron)</div>
+              <div class="preset-desc">Zrównoważone wydanie z teologią barw</div>
+            </div>
+            <span class="badge-local">12 str.</span>
+          </div>
+
+          <!-- Preset 4: 16 stron -->
+          <div class="preset-btn active" id="btn-local_16" onclick="setPreset('local_16')">
             <div>
               <div class="preset-title">Drukarnia Lokalna (16 stron)</div>
-              <div class="preset-desc">Broszura zeszytowa A5, oprawa szyta drutem</div>
+              <div class="preset-desc">Standardowa broszura zeszytowa A5</div>
             </div>
             <span class="badge-local">16 str.</span>
           </div>
 
-          <!-- Preset 2: Amazon KDP 24 strony -->
-          <div class="preset-btn" onclick="setPreset('kdp_24')">
+          <!-- Preset 5: Amazon KDP 24 strony -->
+          <div class="preset-btn" id="btn-kdp_24" onclick="setPreset('kdp_24')">
             <div>
               <div class="preset-title">Amazon KDP Paperback (24 strony)</div>
               <div class="preset-desc">Wymóg min. 24 str., spady 3.2mm, okładka KDP</div>
@@ -392,8 +430,8 @@
             <span class="badge-kdp">KDP Min.</span>
           </div>
 
-          <!-- Preset 3: Wydanie 20 stron -->
-          <div class="preset-btn" onclick="setPreset('local_20')">
+          <!-- Preset 6: Wydanie 20 stron -->
+          <div class="preset-btn" id="btn-local_20" onclick="setPreset('local_20')">
             <div>
               <div class="preset-title">Wydanie Rozszerzone (20 stron)</div>
               <div class="preset-desc">Druk lokalny ze stroną tytułową i redakcyjną</div>
@@ -401,8 +439,8 @@
             <span class="badge-local">20 str.</span>
           </div>
 
-          <!-- Preset 4: Amazon KDP 28 stron -->
-          <div class="preset-btn" onclick="setPreset('kdp_28')">
+          <!-- Preset 7: Amazon KDP 28 stron -->
+          <div class="preset-btn" id="btn-kdp_28" onclick="setPreset('kdp_28')">
             <div>
               <div class="preset-title">Amazon KDP Pełne (28 stron)</div>
               <div class="preset-desc">Rozszerzone wydanie z intencjami modlitewnymi</div>
@@ -420,9 +458,12 @@
             <span id="pageCountLabel" style="color:var(--gold);font-weight:700;">16 stron</span>
           </div>
           <select id="pageCountSelect" onchange="updateCustomSettings()">
-            <option value="16" selected>16 stron (Druk Lokalny / Zeszyt)</option>
+            <option value="4">4 strony (Folder / Ulotka składana A5)</option>
+            <option value="8">8 stron (Zwarta broszura zeszytowa A5)</option>
+            <option value="12">12 stron (Pośrednia broszura zeszytowa A5)</option>
+            <option value="16" selected>16 stron (Standardowa broszura zeszytowa)</option>
             <option value="20">20 stron (Druk Lokalny Rozszerzony)</option>
-            <option value="24">24 strony (Amazon KDP Minimum)</option>
+            <option value="24">24 strony (Amazon KDP Minimum - Wymóg KDP)</option>
             <option value="28">28 stron (Amazon KDP Rozszerzone)</option>
           </select>
         </div>
@@ -475,15 +516,18 @@
         </div>
       </div>
 
-      <!-- Przyciski Generowania PDF -->
+      <!-- Przyciski Pobierania i Druku -->
       <div class="action-buttons">
-        <button class="btn-action" onclick="generatePdf('interior')">
-          📄 Generuj Wnętrze PDF
+        <button class="btn-action" onclick="downloadInteriorPdf()">
+          📄 Pobierz Wnętrze PDF (A5 Gotowe)
         </button>
-        <button class="btn-action btn-secondary" onclick="generatePdf('cover')">
-          🎨 Generuj Okładkę KDP PDF
+        <button class="btn-action btn-secondary" onclick="downloadCoverPdf()">
+          🎨 Pobierz Okładkę KDP PDF
         </button>
-        <button class="btn-action btn-secondary" onclick="generateZipPackage()">
+        <button class="btn-action btn-print" onclick="printActivePreview()">
+          🖨️ Zapisz / Drukuj PDF z podglądu
+        </button>
+        <button class="btn-action btn-secondary" onclick="downloadZipPackage()">
           📦 Pobierz Pakiet Drukarski ZIP
         </button>
       </div>
@@ -503,7 +547,7 @@
       </div>
 
       <div class="preview-iframe-wrapper">
-        <iframe id="previewIframe" src="/preview?type=interior&pages=16&bleed=3&gutter=0&guides=0"></iframe>
+        <iframe id="previewIframe" src="preview.html?pages=16&bleed=3&gutter=0&guides=0"></iframe>
       </div>
     </div>
 
@@ -518,13 +562,26 @@
     function setPreset(preset) {
       currentPreset = preset;
       document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
-      event.currentTarget.classList.add('active');
+      const activeEl = document.getElementById('btn-' + preset);
+      if (activeEl) activeEl.classList.add('active');
 
       const pageSelect = document.getElementById('pageCountSelect');
       const bleedSelect = document.getElementById('bleedSelect');
       const gutterSelect = document.getElementById('gutterSelect');
 
-      if (preset === 'local_16') {
+      if (preset === 'local_4') {
+        pageSelect.value = '4';
+        bleedSelect.value = '3';
+        gutterSelect.value = '0';
+      } else if (preset === 'local_8') {
+        pageSelect.value = '8';
+        bleedSelect.value = '3';
+        gutterSelect.value = '0';
+      } else if (preset === 'local_12') {
+        pageSelect.value = '12';
+        bleedSelect.value = '3';
+        gutterSelect.value = '0';
+      } else if (preset === 'local_16') {
         pageSelect.value = '16';
         bleedSelect.value = '3';
         gutterSelect.value = '0';
@@ -586,7 +643,11 @@
       const website = encodeURIComponent(document.getElementById('websiteUrlInput').value);
 
       const iframe = document.getElementById('previewIframe');
-      iframe.src = `/preview?type=${currentTab}&pages=${pages}&bleed=${bleed}&gutter=${gutter}&guides=${guides}&website=${website}`;
+      if (currentTab === 'interior') {
+        iframe.src = `preview.html?pages=${pages}&bleed=${bleed}&gutter=${gutter}&guides=${guides}&website=${website}`;
+      } else {
+        iframe.src = `cover.html?pages=${pages}&bleed=${bleed}&guides=${guides}&website=${website}`;
+      }
     }
 
     function showToast(msg) {
@@ -596,58 +657,46 @@
       setTimeout(() => { toast.style.display = 'none'; }, 4000);
     }
 
-    async function generatePdf(type) {
+    function downloadInteriorPdf() {
       const pages = document.getElementById('pageCountSelect').value;
-      const bleed = document.getElementById('bleedSelect').value;
-      const gutter = document.getElementById('gutterSelect').value;
-      const website = document.getElementById('websiteUrlInput').value;
-
-      if (type === 'cover' && parseInt(pages) < 24) {
-        alert('Uwaga: Okładka Amazon KDP Wrap-around wymaga minimum 24 stron wnętrza książki.');
-      }
-
-      showToast(`Generowanie pliku PDF (${type === 'interior' ? 'Wnętrze' : 'Okładka KDP'})... Proszę czekać.`);
-
-      try {
-        const resp = await fetch('/api/generate-pdf', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type, pages, bleed, gutter, website })
-        });
-        const res = await resp.json();
-        if (res.success) {
-          showToast('Plik PDF wygenerowany pomyślnie! Rozpoczynanie pobierania...');
-          window.location.href = res.download_url;
-        } else {
-          alert('Błąd podczas generowania PDF: ' + res.error);
-        }
-      } catch (err) {
-        alert('Wystąpił błąd: ' + err);
-      }
+      const filename = `RHZ365_Wnetrze_A5_${pages}str.pdf`;
+      showToast(`Pobieranie wnętrza: ${filename}...`);
+      const link = document.createElement('a');
+      link.href = `downloads/${filename}`;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
-    async function generateZipPackage() {
-      showToast('Przygotowywanie pełnego pakietu drukarskiego ZIP...');
-      try {
-        const pages = document.getElementById('pageCountSelect').value;
-        const bleed = document.getElementById('bleedSelect').value;
-        const gutter = document.getElementById('gutterSelect').value;
-        const website = document.getElementById('websiteUrlInput').value;
+    function downloadCoverPdf() {
+      const filename = `RHZ365_Okladka_KDP_Spread_24str.pdf`;
+      showToast(`Pobieranie okładki Amazon KDP: ${filename}...`);
+      const link = document.createElement('a');
+      link.href = `downloads/${filename}`;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 
-        const resp = await fetch('/api/generate-zip', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pages, bleed, gutter, website })
-        });
-        const res = await resp.json();
-        if (res.success) {
-          showToast('Pakiet ZIP gotowy! Pobieranie...');
-          window.location.href = res.download_url;
-        } else {
-          alert('Błąd: ' + res.error);
-        }
-      } catch (err) {
-        alert('Błąd: ' + err);
+    function downloadZipPackage() {
+      const filename = `Pakiet_Drukarski_RHZ365_KDP.zip`;
+      showToast(`Pobieranie pakietu drukarskiego ZIP: ${filename}...`);
+      const link = document.createElement('a');
+      link.href = `downloads/${filename}`;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function printActivePreview() {
+      showToast('Otwieranie okna druku / zapisu PDF...');
+      const iframe = document.getElementById('previewIframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
       }
     }
   </script>

@@ -81,7 +81,13 @@ class GeneratorHandler(SimpleHTTPRequestHandler):
                 # Interior
                 total_w = round(148 + (2 * bleed), 2)
                 total_h = round(210 + (2 * bleed), 2)
-                if pages <= 16:
+                if pages <= 4:
+                    template_name = 'interior_4.html'
+                elif pages <= 8:
+                    template_name = 'interior_8.html'
+                elif pages <= 12:
+                    template_name = 'interior_12.html'
+                elif pages <= 16:
                     template_name = 'interior_16.html'
                 elif pages <= 20:
                     template_name = 'interior_20.html'
@@ -251,7 +257,13 @@ def compile_pdf(doc_type, pages, bleed, gutter, website):
     else:
         total_w = round(148 + (2 * bleed), 2)
         total_h = round(210 + (2 * bleed), 2)
-        if pages <= 16:
+        if pages <= 4:
+            template_name = 'interior_4.html'
+        elif pages <= 8:
+            template_name = 'interior_8.html'
+        elif pages <= 12:
+            template_name = 'interior_12.html'
+        elif pages <= 16:
             template_name = 'interior_16.html'
         elif pages <= 20:
             template_name = 'interior_20.html'

@@ -385,16 +385,43 @@
         <div class="section-label">Wybór Profilu Wydawniczego</div>
         
         <div class="presets-grid">
-          <!-- Preset 1: Druk Lokalny 16 stron -->
+          <!-- Preset 1: 4 strony -->
+          <div class="preset-btn" id="btn-local_4" onclick="setPreset('local_4')">
+            <div>
+              <div class="preset-title">Folder / Ulotka (4 strony)</div>
+              <div class="preset-desc">Format składany A5, ultra-zwarty przewodnik</div>
+            </div>
+            <span class="badge-local">4 str.</span>
+          </div>
+
+          <!-- Preset 2: 8 stron -->
+          <div class="preset-btn" id="btn-local_8" onclick="setPreset('local_8')">
+            <div>
+              <div class="preset-title">Zwarta Broszura (8 stron)</div>
+              <div class="preset-desc">Zwięzły przewodnik po dziele i 6 różańcach</div>
+            </div>
+            <span class="badge-local">8 str.</span>
+          </div>
+
+          <!-- Preset 3: 12 stron -->
+          <div class="preset-btn" id="btn-local_12" onclick="setPreset('local_12')">
+            <div>
+              <div class="preset-title">Pośrednia Broszura (12 stron)</div>
+              <div class="preset-desc">Zrównoważone wydanie z teologią barw</div>
+            </div>
+            <span class="badge-local">12 str.</span>
+          </div>
+
+          <!-- Preset 4: 16 stron -->
           <div class="preset-btn active" id="btn-local_16" onclick="setPreset('local_16')">
             <div>
               <div class="preset-title">Drukarnia Lokalna (16 stron)</div>
-              <div class="preset-desc">Broszura zeszytowa A5, oprawa szyta drutem</div>
+              <div class="preset-desc">Standardowa broszura zeszytowa A5</div>
             </div>
             <span class="badge-local">16 str.</span>
           </div>
 
-          <!-- Preset 2: Amazon KDP 24 strony -->
+          <!-- Preset 5: Amazon KDP 24 strony -->
           <div class="preset-btn" id="btn-kdp_24" onclick="setPreset('kdp_24')">
             <div>
               <div class="preset-title">Amazon KDP Paperback (24 strony)</div>
@@ -403,7 +430,7 @@
             <span class="badge-kdp">KDP Min.</span>
           </div>
 
-          <!-- Preset 3: Wydanie 20 stron -->
+          <!-- Preset 6: Wydanie 20 stron -->
           <div class="preset-btn" id="btn-local_20" onclick="setPreset('local_20')">
             <div>
               <div class="preset-title">Wydanie Rozszerzone (20 stron)</div>
@@ -412,7 +439,7 @@
             <span class="badge-local">20 str.</span>
           </div>
 
-          <!-- Preset 4: Amazon KDP 28 stron -->
+          <!-- Preset 7: Amazon KDP 28 stron -->
           <div class="preset-btn" id="btn-kdp_28" onclick="setPreset('kdp_28')">
             <div>
               <div class="preset-title">Amazon KDP Pełne (28 stron)</div>
@@ -431,9 +458,12 @@
             <span id="pageCountLabel" style="color:var(--gold);font-weight:700;">16 stron</span>
           </div>
           <select id="pageCountSelect" onchange="updateCustomSettings()">
-            <option value="16" selected>16 stron (Druk Lokalny / Zeszyt)</option>
+            <option value="4">4 strony (Folder / Ulotka składana A5)</option>
+            <option value="8">8 stron (Zwarta broszura zeszytowa A5)</option>
+            <option value="12">12 stron (Pośrednia broszura zeszytowa A5)</option>
+            <option value="16" selected>16 stron (Standardowa broszura zeszytowa)</option>
             <option value="20">20 stron (Druk Lokalny Rozszerzony)</option>
-            <option value="24">24 strony (Amazon KDP Minimum)</option>
+            <option value="24">24 strony (Amazon KDP Minimum - Wymóg KDP)</option>
             <option value="28">28 stron (Amazon KDP Rozszerzone)</option>
           </select>
         </div>
@@ -539,7 +569,19 @@
       const bleedSelect = document.getElementById('bleedSelect');
       const gutterSelect = document.getElementById('gutterSelect');
 
-      if (preset === 'local_16') {
+      if (preset === 'local_4') {
+        pageSelect.value = '4';
+        bleedSelect.value = '3';
+        gutterSelect.value = '0';
+      } else if (preset === 'local_8') {
+        pageSelect.value = '8';
+        bleedSelect.value = '3';
+        gutterSelect.value = '0';
+      } else if (preset === 'local_12') {
+        pageSelect.value = '12';
+        bleedSelect.value = '3';
+        gutterSelect.value = '0';
+      } else if (preset === 'local_16') {
         pageSelect.value = '16';
         bleedSelect.value = '3';
         gutterSelect.value = '0';
