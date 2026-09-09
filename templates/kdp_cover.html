@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Amazon KDP Cover Spread - Różaniec Historii Zbawienia</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+
+    :root {
+      --gold: #d4af37;
+      --gold-dark: #aa8214;
+      --gold-light: #f7e7a9;
+      --navy-deep: #070d18;
+      --navy-main: #0c1728;
+      --border-gold: rgba(212, 175, 55, 0.4);
+      
+      --bleed: {{ bleed_mm }}mm;
+      --spine-width: {{ spine_width_mm }}mm;
+      --total-width: {{ total_cover_width_mm }}mm;
+      --total-height: {{ total_cover_height_mm }}mm;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #1a202c;
+      color: #ffffff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @page {
+      size: {{ total_cover_width_mm }}mm {{ total_cover_height_mm }}mm;
+      margin: 0;
+    }
+
+    .cover-spread {
+      width: {{ total_cover_width_mm }}mm;
+      height: {{ total_cover_height_mm }}mm;
+      display: flex;
+      position: relative;
+      background: radial-gradient(circle at 75% 30%, #1a2f52 0%, #0c1728 50%, #050a12 100%);
+      overflow: hidden;
+      padding: var(--bleed);
+    }
+
+    /* Bleed guide overlay if enabled */
+    {% if show_guides %}
+    .cover-spread::before {
+      content: '';
+      position: absolute;
+      top: var(--bleed);
+      left: var(--bleed);
+      right: var(--bleed);
+      bottom: var(--bleed);
+      border: 1.5px dashed rgba(239, 68, 68, 0.8);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    {% endif %}
+
+    /* Back Cover (Left Side) */
+    .back-cover {
+      width: 148mm;
+      height: 210mm;
+      padding: 13mm 14mm 12mm 14mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* Spine (Center) */
+    .spine {
+      width: var(--spine-width);
+      height: 210mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.25);
+      border-left: 1px solid rgba(212, 175, 55, 0.2);
+      border-right: 1px solid rgba(212, 175, 55, 0.2);
+      position: relative;
+    }
+
+    /* Front Cover (Right Side) */
+    .front-cover {
+      width: 148mm;
+      height: 210mm;
+      padding: 13mm 14mm 12mm 14mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      text-align: center;
+      position: relative;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-size: 7pt;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid var(--gold);
+      color: #fff;
+    }
+
+    .barcode-placeholder {
+      width: 50.8mm;
+      height: 30.5mm;
+      background: #ffffff;
+      color: #333333;
+      border-radius: 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 6.5pt;
+      position: absolute;
+      bottom: 12mm;
+      right: 14mm;
+      border: 1px solid #cbd5e1;
+      text-align: center;
+      padding: 3px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="cover-spread">
+
+  <!-- TYLNA OKŁADKA (LEWA STRONA) -->
+  <div class="back-cover">
+    <div>
+      <div style="border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 4px; margin-bottom: 8px;">
+        <span style="font-family: 'Cinzel', serif; font-size: 8pt; color: var(--gold-light); letter-spacing: 1.5px; text-transform: uppercase;">
+          O Dziele i Modlitwie
+        </span>
+      </div>
+
+      <h2 style="font-size: 11pt; color: #ffffff; margin-bottom: 3px; letter-spacing: 1px;">
+        RÓŻANIEC HISTORII ZBAWIENIA
+      </h2>
+      <h3 style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 8.5pt; color: var(--gold-light); margin-bottom: 8px;">
+        Duchowa podróż przez Pismo Święte i dzieje człowieka
+      </h3>
+
+      <p style="font-size: 7.5pt; color: #e2e8f0; line-height: 1.45; text-align: justify; margin-bottom: 8px;">
+        Różaniec Historii Zbawienia (RHZ365) to unikalna, całoroczna droga modlitwy prowadząca przez 175 tajemnic – od stworzenia świata, przez przymierza patriarchów, pełnię Objawienia w Chrystusie, aż po tajemnice Kościoła i nadzieję Paruzji.
+      </p>
+
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(212,175,55,0.3); border-radius: 4px; padding: 7px 9px; font-size: 7.2pt; line-height: 1.4; color: #cbd5e1; margin-bottom: 8px;">
+        <p style="margin-bottom: 3px;">&bull; <strong>Wymiar Cyfrowy:</strong> Modlitwa z lektorem audio i wizualizacją na <code>widokinaraj.pl</code>.</p>
+        <p style="margin-bottom: 3px;">&bull; <strong>Cztery Tomy WnR365:</strong> Duchowe rozważania na Ziemię, Wiosnę, Lato i Jesień.</p>
+        <p>&bull; <strong>Misja Barw i Kolorów:</strong> Kolekcja 6 fizycznych różańców niosących teologię światła i odkupienia.</p>
+      </div>
+
+      <p style="font-size: 7.2pt; color: #e2e8f0; font-style: italic; text-align: justify; max-width: 80mm;">
+        <em>„Bóg oddzielił światłość od ciemności i było to dobre... Światłość w ciemności świeci i ciemność jej nie ogarnęła.”</em>
+      </p>
+    </div>
+
+    <!-- Miejsce na kod kreskowy KDP (Amazon umieszcza kod w tym obszarze) -->
+    <div class="barcode-placeholder">
+      <span style="font-weight: 700; font-size: 6.5pt; margin-bottom: 2px;">Strefa Kodu KDP</span>
+      <span style="font-size: 5.5pt; color: #64748b;">(Amazon nanosi kod kreskowy automatycznie)</span>
+    </div>
+
+    <div style="border-top: 1px solid rgba(212,175,55,0.3); padding-top: 5px; font-size: 7pt; color: var(--gold-light);">
+      WWW.WIDOKINARAJ.PL &bull; RHZ365
+    </div>
+  </div>
+
+  <!-- GRZBIET (ŚRODEK) -->
+  <div class="spine">
+    <div style="width: 1px; height: 80%; background: linear-gradient(to bottom, transparent, var(--gold), transparent);"></div>
+  </div>
+
+  <!-- PRZEDNIA OKŁADKA (PRAWA STRONA) -->
+  <div class="front-cover">
+    <div style="border: 2px solid var(--gold); padding: 7px 5px; border-radius: 4px; margin-bottom: 4px;">
+      <p style="font-family: 'Cinzel', serif; font-size: 7.2pt; letter-spacing: 2.8px; color: var(--gold-light); margin: 0; text-transform: uppercase;">
+        Duchowa Droga Przez Pismo Święte i Dzieje Kościoła
+      </p>
+    </div>
+
+    <div style="margin: 8px 0;">
+      <svg width="46" height="66" viewBox="0 0 100 140" style="margin: 0 auto 10px auto; display: block; filter: drop-shadow(0 0 12px rgba(212,175,55,0.7));">
+        <rect x="42" y="10" width="16" height="120" rx="4" fill="url(#goldGrad)" />
+        <rect x="15" y="38" width="70" height="16" rx="4" fill="url(#goldGrad)" />
+        <circle cx="50" cy="46" r="14" fill="none" stroke="#fff" stroke-width="3" opacity="0.85" />
+        <defs>
+          <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fff4cc"/>
+            <stop offset="50%" stop-color="#d4af37"/>
+            <stop offset="100%" stop-color="#8a6409"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <h1 style="font-size: 17pt; letter-spacing: 1.2px; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.7); margin-bottom: 4px;">
+        RÓŻANIEC HISTORII ZBAWIENIA
+      </h1>
+      <div style="width: 55px; height: 2px; background: var(--gold); margin: 6px auto;"></div>
+      <h2 style="font-size: 10.5pt; font-weight: 400; color: var(--gold-light); letter-spacing: 1.8px; margin-bottom: 7px;">
+        RHZ365 & WIDOKI NA RAJ
+      </h2>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 8.8pt; color: #d0d7e2; max-width: 105mm; margin: 0 auto;">
+        Wymiar Cyfrowy & Kolekcja Fizycznych Różańców niosących Tajemnicę Misji Barw i Kolorów
+      </p>
+    </div>
+
+    <div style="background: rgba(12,23,40,0.7); border: 1px solid rgba(212,175,55,0.5); border-radius: 5px; padding: 8px 10px; margin: 8px 0;">
+      <p style="font-size: 7.6pt; color: #f0f3f8; margin-bottom: 5px;">
+        <em>„Światłość w ciemności świeci i ciemność jej nie ogarnęła.”</em><br>
+        <span style="color: var(--gold-light); font-size: 7pt;">(J 1, 5)</span>
+      </p>
+      <div style="display: flex; justify-content: center; gap: 7px; flex-wrap: wrap;">
+        <span class="badge">365 Dni Modlitwy</span>
+        <span class="badge">Lektor Online</span>
+        <span class="badge">6 Modeli Różańców</span>
+      </div>
+    </div>
+
+    <div>
+      <p style="font-size: 7.2pt; color: var(--gold-light); letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase;">
+        Oficjalne Wydanie Książkowe
+      </p>
+      <p style="font-size: 8.2pt; font-weight: 700; color: #ffffff; letter-spacing: 1.5px; margin: 0;">
+        WWW.WIDOKINARAJ.PL
+      </p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

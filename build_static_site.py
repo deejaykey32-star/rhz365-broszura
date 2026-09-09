@@ -1,0 +1,544 @@
+import os
+import re
+
+# 1. Read templates
+with open('templates/interior_16.html', 'r', encoding='utf-8') as f:
+    html_16 = f.read()
+with open('templates/interior_20.html', 'r', encoding='utf-8') as f:
+    html_20 = f.read()
+with open('templates/interior_24.html', 'r', encoding='utf-8') as f:
+    html_24 = f.read()
+with open('templates/interior_28.html', 'r', encoding='utf-8') as f:
+    html_28 = f.read()
+
+def extract_body(html):
+    m = re.search(r'<div class="booklet-container">(.*?)</div>\s*</body>', html, re.DOTALL)
+    if m:
+        return m.group(1).strip()
+    return ""
+
+body_16 = extract_body(html_16)
+body_20 = extract_body(html_20)
+body_24 = extract_body(html_24)
+body_28 = extract_body(html_28)
+
+# 2. Build preview.html
+preview_css = """
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+
+    :root {
+      --gold: #d4af37;
+      --gold-dark: #aa8214;
+      --gold-light: #f7e7a9;
+      --navy-deep: #070d18;
+      --navy-main: #0c1728;
+      --navy-light: #16263f;
+      --parchment: #faf8f5;
+      --parchment-card: #ffffff;
+      --text-dark: #1e242d;
+      --text-muted: #57606f;
+      --border-gold: rgba(212, 175, 55, 0.4);
+      --red-rgb: #e02424;
+      --green-rgb: #0e9f6e;
+      --blue-rgb: #1a56db;
+      --cyan-cmyk: #06b6d4;
+      --magenta-cmyk: #d946ef;
+      --yellow-cmyk: #eab308;
+      
+      --bleed: 3mm;
+      --gutter: 0mm;
+      --page-width: 154mm;
+      --page-height: 216mm;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #2b3038;
+      color: var(--text-dark);
+      line-height: 1.42;
+      font-size: 8.6pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media screen {
+      .booklet-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+        padding: 30px 10px;
+      }
+      .page {
+        box-shadow: 0 10px 35px rgba(0,0,0,0.5);
+      }
+    }
+
+    @media print {
+      body { background-color: transparent !important; }
+      .booklet-container { display: block !important; padding: 0 !important; }
+      .page {
+        box-shadow: none !important;
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+        break-after: page !important;
+      }
+    }
+
+    .page {
+      width: var(--page-width);
+      height: var(--page-height);
+      max-height: var(--page-height);
+      position: relative;
+      overflow: hidden;
+      background-color: var(--parchment);
+      padding: calc(11mm + var(--bleed)) calc(13mm + var(--bleed)) calc(10mm + var(--bleed)) calc(13mm + var(--bleed));
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .page:nth-child(odd) {
+      padding-left: calc(13mm + var(--bleed) + var(--gutter));
+      padding-right: calc(13mm + var(--bleed));
+    }
+    .page:nth-child(even) {
+      padding-left: calc(13mm + var(--bleed));
+      padding-right: calc(13mm + var(--bleed) + var(--gutter));
+    }
+
+    .show-guides .page::before {
+      content: '';
+      position: absolute;
+      top: var(--bleed);
+      left: var(--bleed);
+      right: var(--bleed);
+      bottom: var(--bleed);
+      border: 1px dashed rgba(220, 38, 38, 0.7);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .show-guides .page::after {
+      content: 'Linia Cięcia (A5)';
+      position: absolute;
+      top: calc(var(--bleed) + 2px);
+      right: calc(var(--bleed) + 4px);
+      font-size: 5.5pt;
+      color: rgba(220, 38, 38, 0.85);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .page.cover-dark {
+      background: radial-gradient(circle at 50% 25%, #182b49 0%, #0c1728 55%, #050a12 100%);
+      color: #ffffff;
+      padding: calc(12mm + var(--bleed)) calc(13mm + var(--bleed)) calc(10mm + var(--bleed)) calc(13mm + var(--bleed));
+    }
+
+    .page.cover-dark h1, .page.cover-dark h2, .page.cover-dark h3 { color: var(--gold-light); }
+    .page-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-gold); padding-bottom: 3px; margin-bottom: 8px; font-size: 6.8pt; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gold-dark); font-weight: 600; }
+    .page.cover-dark .page-header { border-bottom-color: rgba(212, 175, 55, 0.3); color: var(--gold-light); }
+    .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-gold); padding-top: 3px; margin-top: 6px; font-size: 6.8pt; color: var(--text-muted); letter-spacing: 0.8px; }
+    .page.cover-dark .page-footer { border-top-color: rgba(212, 175, 55, 0.3); color: rgba(255,255,255,0.6); }
+    .page-num { font-weight: 700; color: var(--gold-dark); font-family: 'Cinzel', serif; font-size: 7.5pt; }
+    .page.cover-dark .page-num { color: var(--gold-light); }
+
+    h1, h2, h3, h4 { font-family: 'Cinzel', serif; font-weight: 700; color: var(--navy-deep); line-height: 1.18; }
+    .section-title { font-size: 12.5pt; letter-spacing: 0.5px; margin-bottom: 2px; text-transform: uppercase; color: var(--navy-deep); }
+    .section-subtitle { font-family: 'Playfair Display', serif; font-style: italic; font-size: 8.2pt; color: var(--gold-dark); margin-bottom: 7px; font-weight: 600; }
+    p { margin-bottom: 5px; text-align: justify; hyphens: auto; }
+    p.lead { font-size: 9pt; font-weight: 500; color: var(--navy-light); line-height: 1.38; }
+
+    .card { background: var(--parchment-card); border: 1px solid var(--border-gold); border-radius: 5px; padding: 6px 8px; margin-bottom: 6px; }
+    .card-dark { background: rgba(255,255,255,0.05); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 5px; padding: 7px 9px; margin-bottom: 6px; }
+    .gold-box { border-left: 3px solid var(--gold); background: #fdfaf2; padding: 5px 8px; margin: 5px 0; border-radius: 0 4px 4px 0; font-size: 8pt; }
+
+    .badge { display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 6.8pt; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+    .badge-rgb-r { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+    .badge-rgb-g { background: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+    .badge-rgb-b { background: #dbeafe; color: #1e40af; border: 1px solid #60a5fa; }
+    .badge-gold { background: #fef9c3; color: #854d0e; border: 1px solid #facc15; }
+
+    .product-layout { display: flex; gap: 9px; align-items: stretch; flex: 1; min-height: 0; }
+    .product-image-container { width: 44%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; border: 1px solid var(--border-gold); border-radius: 5px; padding: 5px; }
+    .product-image-container img { max-width: 100%; max-height: 122mm; object-fit: contain; border-radius: 3px; }
+    .product-info { width: 56%; display: flex; flex-direction: column; justify-content: space-between; }
+    .product-spec-list { list-style: none; font-size: 7.8pt; margin-bottom: 5px; }
+    .product-spec-list li { margin-bottom: 4px; padding-left: 11px; position: relative; }
+    .product-spec-list li::before { content: '◆'; position: absolute; left: 0; color: var(--gold); font-size: 5.5pt; top: 1.5px; }
+
+    .buy-card { background: linear-gradient(135deg, #fefcf6 0%, #f7f1e1 100%); border: 1.5px solid var(--gold); border-radius: 5px; padding: 6px 8px; text-align: center; }
+    .buy-card h4 { font-size: 8.2pt; color: var(--gold-dark); margin-bottom: 2px; text-transform: uppercase; }
+    .buy-card p { font-size: 7.3pt; margin-bottom: 4px; text-align: center; }
+    .buy-btn { display: inline-block; background: linear-gradient(135deg, #aa8214 0%, #d4af37 100%); color: #ffffff; font-weight: 700; font-size: 7pt; text-transform: uppercase; padding: 3.5px 9px; border-radius: 4px; text-decoration: none; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+"""
+
+preview_js = """
+  const params = new URLSearchParams(window.location.search);
+  const pages = parseInt(params.get('pages') || '16');
+  const bleed = parseFloat(params.get('bleed') || '3.0');
+  const gutter = parseFloat(params.get('gutter') || '0.0');
+  const guides = params.get('guides') === '1';
+  const website = params.get('website') || 'WWW.WIDOKINARAJ.PL';
+
+  const totalW = (148 + (2 * bleed)).toFixed(2);
+  const totalH = (210 + (2 * bleed)).toFixed(2);
+
+  document.documentElement.style.setProperty('--bleed', bleed + 'mm');
+  document.documentElement.style.setProperty('--gutter', gutter + 'mm');
+  document.documentElement.style.setProperty('--page-width', totalW + 'mm');
+  document.documentElement.style.setProperty('--page-height', totalH + 'mm');
+
+  document.getElementById('dynamic-print-page-style').innerHTML = '@page { size: ' + totalW + 'mm ' + totalH + 'mm; margin: 0; }';
+
+  if (guides) {
+    document.body.classList.add('show-guides');
+  }
+
+  let targetId = 'wrapper-16';
+  if (pages >= 28) targetId = 'wrapper-28';
+  else if (pages >= 24) targetId = 'wrapper-24';
+  else if (pages >= 20) targetId = 'wrapper-20';
+
+  const el = document.getElementById(targetId);
+  if (el) {
+    el.style.display = 'flex';
+    el.innerHTML = el.innerHTML.split('{{ website_url }}').join(website);
+  }
+"""
+
+preview_html = f"""<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Podgląd Wnętrza Broszury A5 • RHZ365</title>
+  <style>
+{preview_css}
+  </style>
+  <style id="dynamic-print-page-style"></style>
+</head>
+<body>
+
+<div id="content-wrapper">
+  <div id="wrapper-16" class="booklet-container" style="display:none;">{body_16}</div>
+  <div id="wrapper-20" class="booklet-container" style="display:none;">{body_20}</div>
+  <div id="wrapper-24" class="booklet-container" style="display:none;">{body_24}</div>
+  <div id="wrapper-28" class="booklet-container" style="display:none;">{body_28}</div>
+</div>
+
+<script>
+{preview_js}
+</script>
+
+</body>
+</html>"""
+
+with open('preview.html', 'w', encoding='utf-8') as f:
+    f.write(preview_html)
+print("preview.html created successfully.")
+
+# 3. Build cover.html
+cover_html = """<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Amazon KDP Cover Spread • Różaniec Historii Zbawienia</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+
+    :root {
+      --gold: #d4af37;
+      --gold-dark: #aa8214;
+      --gold-light: #f7e7a9;
+      --navy-deep: #070d18;
+      --navy-main: #0c1728;
+      --border-gold: rgba(212, 175, 55, 0.4);
+      
+      --bleed: 3.175mm;
+      --spine-width: 1.368mm;
+      --total-width: 303.718mm;
+      --total-height: 216.35mm;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #1a202c;
+      color: #ffffff;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    @media print {
+      body {
+        background-color: transparent !important;
+        padding: 0 !important;
+        display: block !important;
+      }
+      .cover-spread {
+        box-shadow: none !important;
+      }
+    }
+
+    .cover-spread {
+      width: var(--total-width);
+      height: var(--total-height);
+      display: flex;
+      position: relative;
+      background: radial-gradient(circle at 75% 30%, #1a2f52 0%, #0c1728 50%, #050a12 100%);
+      overflow: hidden;
+      padding: var(--bleed);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    }
+
+    .show-guides .cover-spread::before {
+      content: '';
+      position: absolute;
+      top: var(--bleed);
+      left: var(--bleed);
+      right: var(--bleed);
+      bottom: var(--bleed);
+      border: 1.5px dashed rgba(239, 68, 68, 0.85);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .show-guides .cover-spread::after {
+      content: 'KDP Trim Line (Linia obcięcia okładki)';
+      position: absolute;
+      top: calc(var(--bleed) + 2px);
+      left: calc(var(--bleed) + 5px);
+      font-size: 5.5pt;
+      color: rgba(239, 68, 68, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Back Cover (Left Side) */
+    .back-cover {
+      width: 148mm;
+      height: 210mm;
+      padding: 13mm 14mm 12mm 14mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* Spine (Center) */
+    .spine {
+      width: var(--spine-width);
+      height: 210mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.25);
+      border-left: 1px solid rgba(212, 175, 55, 0.2);
+      border-right: 1px solid rgba(212, 175, 55, 0.2);
+      position: relative;
+    }
+
+    /* Front Cover (Right Side) */
+    .front-cover {
+      width: 148mm;
+      height: 210mm;
+      padding: 13mm 14mm 12mm 14mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      text-align: center;
+      position: relative;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-size: 7pt;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid var(--gold);
+      color: #fff;
+    }
+
+    .barcode-placeholder {
+      width: 50.8mm;
+      height: 30.5mm;
+      background: #ffffff;
+      color: #333333;
+      border-radius: 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 6.5pt;
+      position: absolute;
+      bottom: 12mm;
+      right: 14mm;
+      border: 1px solid #cbd5e1;
+      text-align: center;
+      padding: 3px;
+    }
+  </style>
+  <style id="dynamic-print-cover-style"></style>
+</head>
+<body>
+
+<div class="cover-spread">
+
+  <!-- TYLNA OKŁADKA (LEWA STRONA) -->
+  <div class="back-cover">
+    <div>
+      <div style="border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 4px; margin-bottom: 8px;">
+        <span style="font-family: 'Cinzel', serif; font-size: 8pt; color: var(--gold-light); letter-spacing: 1.5px; text-transform: uppercase;">
+          O Dziele i Modlitwie
+        </span>
+      </div>
+
+      <h2 style="font-size: 11pt; color: #ffffff; margin-bottom: 3px; letter-spacing: 1px;">
+        RÓŻANIEC HISTORII ZBAWIENIA
+      </h2>
+      <h3 style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 8.5pt; color: var(--gold-light); margin-bottom: 8px;">
+        Duchowa podróż przez Pismo Święte i dzieje człowieka
+      </h3>
+
+      <p style="font-size: 7.5pt; color: #e2e8f0; line-height: 1.45; text-align: justify; margin-bottom: 8px;">
+        Różaniec Historii Zbawienia (RHZ365) to unikalna, całoroczna droga modlitwy prowadząca przez 175 tajemnic – od stworzenia świata, przez przymierza patriarchów, pełnię Objawienia w Chrystusie, aż po tajemnice Kościoła i nadzieję Paruzji.
+      </p>
+
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(212,175,55,0.3); border-radius: 4px; padding: 7px 9px; font-size: 7.2pt; line-height: 1.4; color: #cbd5e1; margin-bottom: 8px;">
+        <p style="margin-bottom: 3px;">&bull; <strong>Wymiar Cyfrowy:</strong> Modlitwa z lektorem audio i wizualizacją na <code>widokinaraj.pl</code>.</p>
+        <p style="margin-bottom: 3px;">&bull; <strong>Cztery Tomy WnR365:</strong> Duchowe rozważania na Ziemię, Wiosnę, Lato i Jesień.</p>
+        <p>&bull; <strong>Misja Barw i Kolorów:</strong> Kolekcja 6 fizycznych różańców niosących teologię światła i odkupienia.</p>
+      </div>
+
+      <p style="font-size: 7.2pt; color: #e2e8f0; font-style: italic; text-align: justify; max-width: 80mm;">
+        <em>„Bóg oddzielił światłość od ciemności i było to dobre... Światłość w ciemności świeci i ciemność jej nie ogarnęła.”</em>
+      </p>
+    </div>
+
+    <!-- Strefa kodu kreskowego KDP -->
+    <div class="barcode-placeholder">
+      <span style="font-weight: 700; font-size: 6.5pt; margin-bottom: 2px;">Strefa Kodu KDP</span>
+      <span style="font-size: 5.5pt; color: #64748b;">(Amazon nanosi kod kreskowy automatycznie)</span>
+    </div>
+
+    <div style="border-top: 1px solid rgba(212,175,55,0.3); padding-top: 5px; font-size: 7pt; color: var(--gold-light);" id="backWebsite">
+      WWW.WIDOKINARAJ.PL &bull; RHZ365
+    </div>
+  </div>
+
+  <!-- GRZBIET (ŚRODEK) -->
+  <div class="spine">
+    <div style="width: 1px; height: 80%; background: linear-gradient(to bottom, transparent, var(--gold), transparent);"></div>
+  </div>
+
+  <!-- PRZEDNIA OKŁADKA (PRAWA STRONA) -->
+  <div class="front-cover">
+    <div style="border: 2px solid var(--gold); padding: 7px 5px; border-radius: 4px; margin-bottom: 4px;">
+      <p style="font-family: 'Cinzel', serif; font-size: 7.2pt; letter-spacing: 2.8px; color: var(--gold-light); margin: 0; text-transform: uppercase;">
+        Duchowa Droga Przez Pismo Święte i Dzieje Kościoła
+      </p>
+    </div>
+
+    <div style="margin: 8px 0;">
+      <svg width="46" height="66" viewBox="0 0 100 140" style="margin: 0 auto 10px auto; display: block; filter: drop-shadow(0 0 12px rgba(212,175,55,0.7));">
+        <rect x="42" y="10" width="16" height="120" rx="4" fill="url(#goldGrad)" />
+        <rect x="15" y="38" width="70" height="16" rx="4" fill="url(#goldGrad)" />
+        <circle cx="50" cy="46" r="14" fill="none" stroke="#fff" stroke-width="3" opacity="0.85" />
+        <defs>
+          <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fff4cc"/>
+            <stop offset="50%" stop-color="#d4af37"/>
+            <stop offset="100%" stop-color="#8a6409"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <h1 style="font-size: 17pt; letter-spacing: 1.2px; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.7); margin-bottom: 4px;">
+        RÓŻANIEC HISTORII ZBAWIENIA
+      </h1>
+      <div style="width: 55px; height: 2px; background: var(--gold); margin: 6px auto;"></div>
+      <h2 style="font-size: 10.5pt; font-weight: 400; color: var(--gold-light); letter-spacing: 1.8px; margin-bottom: 7px;">
+        RHZ365 & WIDOKI NA RAJ
+      </h2>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 8.8pt; color: #d0d7e2; max-width: 105mm; margin: 0 auto;">
+        Wymiar Cyfrowy & Kolekcja Fizycznych Różańców niosących Tajemnicę Misji Barw i Kolorów
+      </p>
+    </div>
+
+    <div style="background: rgba(12,23,40,0.7); border: 1px solid rgba(212,175,55,0.5); border-radius: 5px; padding: 8px 10px; margin: 8px 0;">
+      <p style="font-size: 7.6pt; color: #f0f3f8; margin-bottom: 5px;">
+        <em>„Światłość w ciemności świeci i ciemność jej nie ogarnęła.”</em><br>
+        <span style="color: var(--gold-light); font-size: 7pt;">(J 1, 5)</span>
+      </p>
+      <div style="display: flex; justify-content: center; gap: 7px; flex-wrap: wrap;">
+        <span class="badge">365 Dni Modlitwy</span>
+        <span class="badge">Lektor Online</span>
+        <span class="badge">6 Modeli Różańców</span>
+      </div>
+    </div>
+
+    <div>
+      <p style="font-size: 7.2pt; color: var(--gold-light); letter-spacing: 1px; margin-bottom: 2px; text-transform: uppercase;">
+        Oficjalne Wydanie Książkowe
+      </p>
+      <p style="font-size: 8.2pt; font-weight: 700; color: #ffffff; letter-spacing: 1.5px; margin: 0;" id="frontWebsite">
+        WWW.WIDOKINARAJ.PL
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const pages = parseInt(params.get('pages') || '24');
+  const bleed = parseFloat(params.get('bleed') || '3.175');
+  const guides = params.get('guides') === '1';
+  const website = params.get('website') || 'WWW.WIDOKINARAJ.PL';
+
+  // Amazon KDP spine calculation: pages * 0.057 mm for standard white paper
+  const spineWidth = (pages * 0.057).toFixed(3);
+  const totalW = (148 + parseFloat(spineWidth) + 148 + (2 * bleed)).toFixed(3);
+  const totalH = (210 + (2 * bleed)).toFixed(2);
+
+  document.documentElement.style.setProperty('--bleed', bleed + 'mm');
+  document.documentElement.style.setProperty('--spine-width', spineWidth + 'mm');
+  document.documentElement.style.setProperty('--total-width', totalW + 'mm');
+  document.documentElement.style.setProperty('--total-height', totalH + 'mm');
+
+  document.getElementById('dynamic-print-cover-style').innerHTML = '@page { size: ' + totalW + 'mm ' + totalH + 'mm; margin: 0; }';
+
+  if (guides) {
+    document.body.classList.add('show-guides');
+  }
+
+  document.getElementById('backWebsite').innerText = website + ' • RHZ365';
+  document.getElementById('frontWebsite').innerText = website;
+</script>
+
+</body>
+</html>"""
+
+with open('cover.html', 'w', encoding='utf-8') as f:
+    f.write(cover_html)
+print("cover.html created successfully.")
