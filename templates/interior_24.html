@@ -35,8 +35,8 @@
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: #2b3038;
       color: var(--text-dark);
-      line-height: 1.42;
-      font-size: 8.6pt;
+      line-height: 1.5;
+      font-size: 10pt;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -53,10 +53,27 @@
         gap: 25px;
         padding: 30px 10px;
       }
-      .page {
-        box-shadow: 0 10px 35px rgba(0,0,0,0.5);
-      }
+          .page {
+      width: {{ page_width_mm }}mm;
+      height: {{ page_height_mm }}mm;
+      max-height: {{ page_height_mm }}mm;
+      position: relative;
+      overflow: hidden;
+      background-color: var(--parchment);
+      padding: calc(11mm + var(--bleed)) calc(13mm + var(--bleed)) calc(10mm + var(--bleed)) calc(13mm + var(--bleed));
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
+
+    .page:nth-child(odd) {
+      padding-left: calc(13mm + var(--bleed) + var(--gutter));
+      padding-right: calc(13mm + var(--bleed));
+    }
+    .page:nth-child(even) {
+      padding-left: calc(13mm + var(--bleed));
+      padding-right: calc(13mm + var(--bleed) + var(--gutter));
+    }}
 
     @media print {
       body { background-color: transparent; }
@@ -118,50 +135,64 @@
     }
     {% endif %}
 
-    .page-header {
+        .page-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-gold);
-      padding-bottom: 3px;
-      margin-bottom: 8px;
-      font-size: 6.8pt;
+      border-bottom: 1.5px solid var(--border-gold);
+      padding-bottom: 4px;
+      margin-bottom: 9px;
+      font-size: 7.8pt;
       text-transform: uppercase;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.4px;
       color: var(--gold-dark);
-      font-weight: 600;
+      font-weight: 700;
+    }
+
+    .page.cover-dark .page-header {
+      border-bottom-color: rgba(212, 175, 55, 0.4);
+      color: var(--gold-light);
     }
 
     .page-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top: 1px solid var(--border-gold);
-      padding-top: 3px;
-      margin-top: 6px;
-      font-size: 6.8pt;
+      border-top: 1.5px solid var(--border-gold);
+      padding-top: 4px;
+      margin-top: 8px;
+      font-size: 7.8pt;
       color: var(--text-muted);
-      letter-spacing: 0.8px;
+      letter-spacing: 1px;
+    }
+
+    .page.cover-dark .page-footer {
+      border-top-color: rgba(212, 175, 55, 0.4);
+      color: rgba(255,255,255,0.7);
     }
 
     .page-num {
       font-weight: 700;
       color: var(--gold-dark);
       font-family: 'Cinzel', serif;
-      font-size: 7.5pt;
+      font-size: 8.8pt;
+    }
+
+    .page.cover-dark .page-num {
+      color: var(--gold-light);
     }
 
     h1, h2, h3, h4 {
       font-family: 'Cinzel', serif;
       font-weight: 700;
       color: var(--navy-deep);
-      line-height: 1.18;
+      line-height: 1.2;
     }
 
     .section-title {
-      font-size: 12.5pt;
-      letter-spacing: 0.5px;
-      margin-bottom: 2px;
+      font-size: 15.5pt;
+      letter-spacing: 0.6px;
+      margin-bottom: 3px;
       text-transform: uppercase;
       color: var(--navy-deep);
     }
@@ -169,38 +200,62 @@
     .section-subtitle {
       font-family: 'Playfair Display', serif;
       font-style: italic;
-      font-size: 8.2pt;
+      font-size: 9.8pt;
       color: var(--gold-dark);
-      margin-bottom: 7px;
+      margin-bottom: 9px;
       font-weight: 600;
     }
 
-    p { margin-bottom: 5px; text-align: justify; hyphens: auto; }
-    p.lead { font-size: 9pt; font-weight: 500; color: var(--navy-light); line-height: 1.38; }
+    p {
+      margin-bottom: 7px;
+      text-align: justify;
+      hyphens: auto;
+      font-size: 9.6pt;
+      line-height: 1.48;
+    }
+
+    p.lead {
+      font-size: 10.8pt;
+      font-weight: 500;
+      color: var(--navy-light);
+      line-height: 1.44;
+      margin-bottom: 9px;
+    }
 
     .card {
       background: var(--parchment-card);
       border: 1px solid var(--border-gold);
-      border-radius: 5px;
-      padding: 6px 8px;
-      margin-bottom: 6px;
+      border-radius: 6px;
+      padding: 9px 12px;
+      margin-bottom: 9px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      font-size: 9.2pt;
+      line-height: 1.45;
+    }
+
+    .card-dark {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 6px;
+      padding: 10px 13px;
+      margin-bottom: 9px;
     }
 
     .gold-box {
-      border-left: 3px solid var(--gold);
+      border-left: 3.5px solid var(--gold);
       background: #fdfaf2;
-      padding: 5px 8px;
-      margin: 5px 0;
-      border-radius: 0 4px 4px 0;
-      font-size: 8pt;
+      padding: 8px 12px;
+      margin: 8px 0;
+      border-radius: 0 5px 5px 0;
+      font-size: 9.2pt;
+      line-height: 1.44;
     }
 
     .badge {
       display: inline-block;
-      padding: 1px 5px;
-      border-radius: 3px;
-      font-size: 6.8pt;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 7.5pt;
       font-weight: 700;
       letter-spacing: 0.5px;
       text-transform: uppercase;
@@ -209,10 +264,12 @@
     .badge-rgb-g { background: #dcfce7; color: #166534; border: 1px solid #4ade80; }
     .badge-rgb-b { background: #dbeafe; color: #1e40af; border: 1px solid #60a5fa; }
     .badge-gold { background: #fef9c3; color: #854d0e; border: 1px solid #facc15; }
+    .badge-black { background: #1f2937; color: #f9fafb; }
+    .badge-white { background: #ffffff; color: #1f2937; border: 1px solid #d1d5db; }
 
     .product-layout {
       display: flex;
-      gap: 9px;
+      gap: 12px;
       align-items: stretch;
       flex: 1;
       min-height: 0;
@@ -225,16 +282,16 @@
       align-items: center;
       justify-content: center;
       background: #ffffff;
-      border: 1px solid var(--border-gold);
-      border-radius: 5px;
-      padding: 5px;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 6px;
+      padding: 6px;
     }
 
     .product-image-container img {
       max-width: 100%;
-      max-height: 122mm;
+      max-height: 124mm;
       object-fit: contain;
-      border-radius: 3px;
+      border-radius: 4px;
     }
 
     .product-info {
@@ -246,13 +303,14 @@
 
     .product-spec-list {
       list-style: none;
-      font-size: 7.8pt;
-      margin-bottom: 5px;
+      font-size: 9.2pt;
+      margin-bottom: 7px;
+      line-height: 1.45;
     }
 
     .product-spec-list li {
-      margin-bottom: 4px;
-      padding-left: 11px;
+      margin-bottom: 5px;
+      padding-left: 14px;
       position: relative;
     }
 
@@ -261,32 +319,33 @@
       position: absolute;
       left: 0;
       color: var(--gold);
-      font-size: 5.5pt;
+      font-size: 6.5pt;
       top: 1.5px;
     }
 
     .buy-card {
       background: linear-gradient(135deg, #fefcf6 0%, #f7f1e1 100%);
       border: 1.5px solid var(--gold);
-      border-radius: 5px;
-      padding: 6px 8px;
+      border-radius: 6px;
+      padding: 9px 12px;
       text-align: center;
-      box-shadow: 0 2px 5px rgba(170, 130, 20, 0.1);
+      box-shadow: 0 2px 6px rgba(170, 130, 20, 0.12);
     }
 
     .buy-card h4 {
-      font-size: 8.2pt;
+      font-size: 9.8pt;
       color: var(--gold-dark);
-      margin-bottom: 2px;
+      margin-bottom: 3px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
     }
 
     .buy-card p {
-      font-size: 7.3pt;
+      font-size: 8.6pt;
       color: var(--text-dark);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       text-align: center;
+      line-height: 1.35;
     }
 
     .buy-btn {
@@ -294,18 +353,19 @@
       background: linear-gradient(135deg, #aa8214 0%, #d4af37 100%);
       color: #ffffff;
       font-weight: 700;
-      font-size: 7pt;
+      font-size: 8.2pt;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      padding: 3.5px 9px;
+      padding: 5px 12px;
       border-radius: 4px;
       text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 7px;
+      gap: 10px;
     }
   </style>
 </head>
