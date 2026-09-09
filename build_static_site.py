@@ -31,186 +31,22 @@ body_20 = extract_body(html_20)
 body_24 = extract_body(html_24)
 body_28 = extract_body(html_28)
 
-# 2. Build preview.html
-preview_css = """
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+# 2. Extract CSS from interior_16.html and adapt for preview.html
+from make_master_brochures import CSS_TEMPLATE
 
-    :root {
-      --gold: #d4af37;
-      --gold-dark: #aa8214;
-      --gold-light: #f7e7a9;
-      --navy-deep: #070d18;
-      --navy-main: #0c1728;
-      --navy-light: #16263f;
-      --parchment: #faf8f5;
-      --parchment-card: #ffffff;
-      --text-dark: #1e242d;
-      --text-muted: #57606f;
-      --border-gold: rgba(212, 175, 55, 0.4);
-      --red-rgb: #e02424;
-      --green-rgb: #0e9f6e;
-      --blue-rgb: #1a56db;
-      --cyan-cmyk: #06b6d4;
-      --magenta-cmyk: #d946ef;
-      --yellow-cmyk: #eab308;
-      
-      --bleed: 3mm;
-      --gutter: 0mm;
-      --page-width: 154mm;
-      --page-height: 216mm;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #2b3038;
-      color: var(--text-dark);
-      line-height: 1.5;
-      font-size: 10pt;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    @media screen {
-      .booklet-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 25px;
-        padding: 30px 10px;
-      }
-      .page {
-        box-shadow: 0 10px 35px rgba(0,0,0,0.5);
-      }
-    }
-
-    @media print {
-      body { background-color: transparent !important; }
-      .booklet-container { display: block !important; padding: 0 !important; }
-      .page {
-        box-shadow: none !important;
-        page-break-after: always !important;
-        page-break-inside: avoid !important;
-        break-after: page !important;
-      }
-    }
-
-    .page {
-      width: var(--page-width);
-      height: var(--page-height);
-      max-height: var(--page-height);
-      position: relative;
-      overflow: hidden;
-      background-color: var(--parchment);
-      padding: calc(11mm + var(--bleed)) calc(13mm + var(--bleed)) calc(10mm + var(--bleed)) calc(13mm + var(--bleed));
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .page:nth-child(odd) {
-      padding-left: calc(13mm + var(--bleed) + var(--gutter));
-      padding-right: calc(13mm + var(--bleed));
-    }
-    .page:nth-child(even) {
-      padding-left: calc(13mm + var(--bleed));
-      padding-right: calc(13mm + var(--bleed) + var(--gutter));
-    }
-
-    .show-guides .page::before {
-      content: '';
-      position: absolute;
-      top: var(--bleed);
-      left: var(--bleed);
-      right: var(--bleed);
-      bottom: var(--bleed);
-      border: 1px dashed rgba(220, 38, 38, 0.7);
-      pointer-events: none;
-      z-index: 9999;
-    }
-    .show-guides .page::after {
-      content: 'Linia Cięcia (A5)';
-      position: absolute;
-      top: calc(var(--bleed) + 2px);
-      right: calc(var(--bleed) + 4px);
-      font-size: 5.5pt;
-      color: rgba(220, 38, 38, 0.85);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    .page.cover-dark {
-      background: radial-gradient(circle at 50% 25%, #182b49 0%, #0c1728 55%, #050a12 100%);
-      color: #ffffff;
-      padding: calc(12mm + var(--bleed)) calc(13mm + var(--bleed)) calc(10mm + var(--bleed)) calc(13mm + var(--bleed));
-    }
-
-    .page.cover-dark h1, .page.cover-dark h2, .page.cover-dark h3 { color: var(--gold-light); }
-    .page-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid var(--border-gold); padding-bottom: 4px; margin-bottom: 9px; font-size: 7.8pt; text-transform: uppercase; letter-spacing: 1.4px; color: var(--gold-dark); font-weight: 700; }
-    .page.cover-dark .page-header { border-bottom-color: rgba(212, 175, 55, 0.4); color: var(--gold-light); }
-    .page-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1.5px solid var(--border-gold); padding-top: 4px; margin-top: 8px; font-size: 7.8pt; color: var(--text-muted); letter-spacing: 1px; }
-    .page.cover-dark .page-footer { border-top-color: rgba(212, 175, 55, 0.4); color: rgba(255,255,255,0.7); }
-    .page-num { font-weight: 700; color: var(--gold-dark); font-family: 'Cinzel', serif; font-size: 8.8pt; }
-    .page.cover-dark .page-num { color: var(--gold-light); }
-
-    h1, h2, h3, h4 { font-family: 'Cinzel', serif; font-weight: 700; color: var(--navy-deep); line-height: 1.2; }
-    .section-title { font-size: 15.5pt; letter-spacing: 0.6px; margin-bottom: 3px; text-transform: uppercase; color: var(--navy-deep); }
-    .section-subtitle { font-family: 'Playfair Display', serif; font-style: italic; font-size: 9.8pt; color: var(--gold-dark); margin-bottom: 9px; font-weight: 600; }
-    p { margin-bottom: 7px; text-align: justify; hyphens: auto; font-size: 9.6pt; line-height: 1.48; }
-    p.lead { font-size: 10.8pt; font-weight: 500; color: var(--navy-light); line-height: 1.44; margin-bottom: 9px; }
-
-    .card { background: var(--parchment-card); border: 1px solid var(--border-gold); border-radius: 6px; padding: 9px 12px; margin-bottom: 9px; box-shadow: 0 1px 4px rgba(0,0,0,0.03); font-size: 9.2pt; line-height: 1.45; }
-    .card-dark { background: rgba(255,255,255,0.06); border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 6px; padding: 10px 13px; margin-bottom: 9px; }
-    .gold-box { border-left: 3.5px solid var(--gold); background: #fdfaf2; padding: 8px 12px; margin: 8px 0; border-radius: 0 5px 5px 0; font-size: 9.2pt; line-height: 1.44; }
-
-    .badge { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-    .badge-rgb-r { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
-    .badge-rgb-g { background: #dcfce7; color: #166534; border: 1px solid #4ade80; }
-    .badge-rgb-b { background: #dbeafe; color: #1e40af; border: 1px solid #60a5fa; }
-    .badge-gold { background: #fef9c3; color: #854d0e; border: 1px solid #facc15; }
-
-    .product-layout { display: flex; gap: 12px; align-items: stretch; flex: 1; min-height: 0; }
-    .product-image-container { width: 44%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; border: 1.5px solid var(--border-gold); border-radius: 6px; padding: 6px; }
-    .product-image-container img { max-width: 100%; max-height: 124mm; object-fit: contain; border-radius: 4px; }
-    .product-info { width: 56%; display: flex; flex-direction: column; justify-content: space-between; }
-    .product-spec-list { list-style: none; font-size: 9.2pt; margin-bottom: 7px; line-height: 1.45; }
-    .product-spec-list li { margin-bottom: 5px; padding-left: 14px; position: relative; }
-    .product-spec-list li::before { content: '◆'; position: absolute; left: 0; color: var(--gold); font-size: 6.5pt; top: 1.5px; }
-
-    .buy-card { background: linear-gradient(135deg, #fefcf6 0%, #f7f1e1 100%); border: 1.5px solid var(--gold); border-radius: 6px; padding: 9px 12px; text-align: center; box-shadow: 0 2px 6px rgba(170, 130, 20, 0.12); }
-    .buy-card h4 { font-size: 9.8pt; color: var(--gold-dark); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.6px; }
-    .buy-card p { font-size: 8.6pt; color: var(--text-dark); margin-bottom: 6px; text-align: center; line-height: 1.35; }
-    .buy-btn { display: inline-block; background: linear-gradient(135deg, #aa8214 0%, #d4af37 100%); color: #ffffff; font-weight: 700; font-size: 8.2pt; text-transform: uppercase; letter-spacing: 0.8px; padding: 5px 12px; border-radius: 4px; text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-    /* Styles for 4-page grid */
-    .rosaries-grid-6 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0; }
-    .rosary-item-box { background: #ffffff; border: 1px solid var(--border-gold); border-radius: 4px; padding: 5px 6px; display: flex; gap: 6px; align-items: center; }
-    .rosary-item-box img { width: 35mm; height: 35mm; object-fit: contain; border-radius: 4px; background: #faf8f5; padding: 3px; border: 1px solid #f0e6d2; flex-shrink: 0; }
-    .rosary-item-text { flex: 1; font-size: 7.8pt; line-height: 1.35; }
-    .rosary-item-text h4 { font-size: 8.5pt; color: var(--navy-deep); margin-bottom: 2px; }
-    .buy-btn-mini { display: inline-block; background: linear-gradient(135deg, #aa8214 0%, #d4af37 100%); color: #ffffff; font-weight: 700; font-size: 7.2pt; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; text-decoration: none; margin-top: 3px; }
-
-    /* Styles for 8 and 12-page pairs */
-    .pair-layout { display: flex; flex-direction: column; gap: 8px; flex: 1; justify-content: space-around; }
-    .product-row-card { display: flex; gap: 10px; background: #ffffff; border: 1px solid var(--border-gold); border-radius: 5px; padding: 7px 9px; align-items: center; }
-    .product-row-card img { width: 42mm; height: 52mm; object-fit: contain; border-radius: 4px; background: #faf8f5; padding: 4px; border: 1px solid #f0e6d2; flex-shrink: 0; }
-    .product-row-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
-    .product-row-info h4 { font-size: 10.2pt; color: var(--navy-deep); margin-bottom: 3px; }
-    .product-row-info p { font-size: 8.8pt; line-height: 1.42; margin-bottom: 5px; }
-    .product-row-info ul { list-style: none; font-size: 8.5pt; margin-bottom: 6px; }
-    .product-row-info ul li { padding-left: 10px; position: relative; margin-bottom: 2px; }
-    .product-row-info ul li::before { content: '◆'; position: absolute; left: 0; color: var(--gold); font-size: 5pt; top: 1.5px; }
-    .buy-btn-small { display: inline-block; background: linear-gradient(135deg, #aa8214 0%, #d4af37 100%); color: #ffffff; font-weight: 700; font-size: 7.8pt; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; text-decoration: none; align-self: flex-start; }
-"""
+preview_css = CSS_TEMPLATE.replace('{{ bleed_mm }}', '3.0')
+preview_css = preview_css.replace('{{ gutter_mm }}', '0.0')
+preview_css = preview_css.replace('{{ page_width_mm }}', '154')
+preview_css = preview_css.replace('{{ page_height_mm }}', '216')
+preview_css = preview_css.replace('{% if show_guides %}', '/* guides */')
+preview_css = preview_css.replace('{% endif %}', '')
 
 preview_js = """
   const params = new URLSearchParams(window.location.search);
   const pages = parseInt(params.get('pages') || '16');
   const bleed = parseFloat(params.get('bleed') || '3.0');
   const gutter = parseFloat(params.get('gutter') || '0.0');
+  const fontsize = parseFloat(params.get('fontsize') || '12');
   const guides = params.get('guides') === '1';
   const website = params.get('website') || 'WWW.WIDOKINARAJ.PL';
 
@@ -221,6 +57,7 @@ preview_js = """
   document.documentElement.style.setProperty('--gutter', gutter + 'mm');
   document.documentElement.style.setProperty('--page-width', totalW + 'mm');
   document.documentElement.style.setProperty('--page-height', totalH + 'mm');
+  document.documentElement.style.setProperty('--base-font-size', fontsize + 'pt');
 
   document.getElementById('dynamic-print-page-style').innerHTML = '@page { size: ' + totalW + 'mm ' + totalH + 'mm; margin: 0; }';
 
@@ -275,13 +112,12 @@ preview_html = f"""<!DOCTYPE html>
 
 with open('preview.html', 'w', encoding='utf-8') as f:
     f.write(preview_html)
-print("preview.html updated successfully with enlarged typography!")
+print("preview.html updated successfully with dynamic font regulation and full layouts!")
 
 # 3. Update cover.html directly from templates/kdp_cover.html
 with open('templates/kdp_cover.html', 'r', encoding='utf-8') as f:
     kdp_tmpl = f.read()
 
-# Replace jinja tags in kdp_cover for client-side cover.html
 kdp_static = kdp_tmpl.replace('{{ bleed_mm }}', '3.175')
 kdp_static = kdp_static.replace('{{ spine_width_mm }}', '1.368')
 kdp_static = kdp_static.replace('{{ total_cover_width_mm }}', '303.718')
@@ -290,12 +126,12 @@ kdp_static = kdp_static.replace('{% if show_guides %}', '<script>/* guides */</s
 kdp_static = kdp_static.replace('{% endif %}', '')
 kdp_static = kdp_static.replace('{{ website_url }}', 'WWW.WIDOKINARAJ.PL')
 
-# Add script at the end before </body>
 script_tag = """
 <script>
   const params = new URLSearchParams(window.location.search);
   const pages = parseInt(params.get('pages') || '24');
   const bleed = parseFloat(params.get('bleed') || '3.175');
+  const fontsize = parseFloat(params.get('fontsize') || '12');
   const guides = params.get('guides') === '1';
   const website = params.get('website') || 'WWW.WIDOKINARAJ.PL';
 
@@ -307,6 +143,7 @@ script_tag = """
   document.documentElement.style.setProperty('--spine-width', spineWidth + 'mm');
   document.documentElement.style.setProperty('--total-width', totalW + 'mm');
   document.documentElement.style.setProperty('--total-height', totalH + 'mm');
+  document.documentElement.style.setProperty('--base-font-size', fontsize + 'pt');
 
   if (guides) {
     document.body.classList.add('show-guides');
@@ -317,4 +154,4 @@ kdp_static = kdp_static.replace('</body>', script_tag + '\n</body>')
 
 with open('cover.html', 'w', encoding='utf-8') as f:
     f.write(kdp_static)
-print("cover.html updated successfully with enlarged typography!")
+print("cover.html updated successfully with dynamic font regulation!")

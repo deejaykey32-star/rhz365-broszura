@@ -2,11 +2,10 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Różaniec Historii Zbawienia - 8 Stron A5</title>
+  <title>Różaniec Historii Zbawienia - Broszura 8 Stron A5</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
-
     :root {
+      --base-font-size: {{ font_size_pt | default(12) }}pt;
       --gold: #d4af37;
       --gold-dark: #aa8214;
       --gold-light: #f7e7a9;
@@ -16,17 +15,19 @@
       --parchment: #faf8f5;
       --parchment-card: #ffffff;
       --text-dark: #1e242d;
-      --text-muted: #57606f;
-      --border-gold: rgba(212, 175, 55, 0.4);
-      --red-rgb: #e02424;
-      --green-rgb: #0e9f6e;
-      --blue-rgb: #1a56db;
-      --cyan-cmyk: #06b6d4;
-      --magenta-cmyk: #d946ef;
-      --yellow-cmyk: #eab308;
+      --text-muted: #4b5563;
+      --border-gold: rgba(212, 175, 55, 0.45);
+      --red-rgb: #dc2626;
+      --green-rgb: #059669;
+      --blue-rgb: #2563eb;
+      --cyan-cmyk: #0891b2;
+      --magenta-cmyk: #c026d3;
+      --yellow-cmyk: #ca8a04;
       
       --bleed: {{ bleed_mm }}mm;
       --gutter: {{ gutter_mm }}mm;
+      --page-width: {{ page_width_mm }}mm;
+      --page-height: {{ page_height_mm }}mm;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,7 +37,7 @@
       background-color: #2b3038;
       color: var(--text-dark);
       line-height: 1.5;
-      font-size: 9.8pt;
+      font-size: var(--base-font-size);
       -webkit-font-smoothing: antialiased;
     }
 
@@ -54,18 +55,18 @@
         padding: 30px 10px;
       }
       .page {
-        box-shadow: 0 10px 35px rgba(0,0,0,0.5);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.5);
       }
     }
 
     @media print {
-      body { background-color: transparent; }
-      .booklet-container { display: block; padding: 0; }
+      body { background-color: transparent !important; }
+      .booklet-container { display: block !important; padding: 0 !important; }
       .page {
-        box-shadow: none;
-        page-break-after: always;
-        page-break-inside: avoid;
-        break-after: page;
+        box-shadow: none !important;
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+        break-after: page !important;
       }
     }
 
@@ -76,19 +77,19 @@
       position: relative;
       overflow: hidden;
       background-color: var(--parchment);
-      padding: calc(11mm + var(--bleed)) calc(13mm + var(--bleed)) calc(10mm + var(--bleed)) calc(13mm + var(--bleed));
+      padding: calc(8mm + var(--bleed)) calc(10.5mm + var(--bleed)) calc(8mm + var(--bleed)) calc(10.5mm + var(--bleed));
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
     .page:nth-child(odd) {
-      padding-left: calc(13mm + var(--bleed) + var(--gutter));
-      padding-right: calc(13mm + var(--bleed));
+      padding-left: calc(10.5mm + var(--bleed) + var(--gutter));
+      padding-right: calc(10.5mm + var(--bleed));
     }
     .page:nth-child(even) {
-      padding-left: calc(13mm + var(--bleed));
-      padding-right: calc(13mm + var(--bleed) + var(--gutter));
+      padding-left: calc(10.5mm + var(--bleed));
+      padding-right: calc(10.5mm + var(--bleed) + var(--gutter));
     }
 
     {% if show_guides %}
@@ -99,16 +100,16 @@
       left: var(--bleed);
       right: var(--bleed);
       bottom: var(--bleed);
-      border: 1px dashed rgba(220, 38, 38, 0.7);
+      border: 1px dashed rgba(220, 38, 38, 0.75);
       pointer-events: none;
       z-index: 9999;
     }
     .page::after {
-      content: 'Trim Line (A5)';
+      content: 'KDP Trim Line';
       position: absolute;
       top: calc(var(--bleed) + 2px);
       right: calc(var(--bleed) + 4px);
-      font-size: 5.5pt;
+      font-size: 7pt;
       color: rgba(220, 38, 38, 0.85);
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -120,81 +121,142 @@
     .page.cover-dark {
       background: radial-gradient(circle at 50% 25%, #182b49 0%, #0c1728 55%, #050a12 100%);
       color: #ffffff;
-      padding: calc(12mm + var(--bleed)) calc(13mm + var(--bleed)) calc(10mm + var(--bleed)) calc(13mm + var(--bleed));
+      padding: calc(8.5mm + var(--bleed)) calc(11mm + var(--bleed)) calc(8.5mm + var(--bleed)) calc(11mm + var(--bleed));
     }
 
-    .page.cover-dark h1, .page.cover-dark h2, .page.cover-dark h3 {
-      color: var(--gold-light);
-    }
+    .page.cover-dark h1, .page.cover-dark h2, .page.cover-dark h3 { color: var(--gold-light); }
 
     .page-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-gold);
+      border-bottom: 1.5px solid var(--border-gold);
       padding-bottom: 3px;
-      margin-bottom: 8px;
-      font-size: 6.8pt;
+      margin-bottom: 6px;
+      font-size: 8.5pt;
       text-transform: uppercase;
       letter-spacing: 1.2px;
       color: var(--gold-dark);
-      font-weight: 600;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .page.cover-dark .page-header {
+      border-bottom-color: rgba(212, 175, 55, 0.4);
+      color: var(--gold-light);
     }
 
     .page-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top: 1px solid var(--border-gold);
+      border-top: 1.5px solid var(--border-gold);
       padding-top: 3px;
       margin-top: 6px;
-      font-size: 6.8pt;
+      font-size: 8.5pt;
       color: var(--text-muted);
       letter-spacing: 0.8px;
+      flex-shrink: 0;
+    }
+
+    .page.cover-dark .page-footer {
+      border-top-color: rgba(212, 175, 55, 0.4);
+      color: rgba(255,255,255,0.7);
     }
 
     .page-num {
       font-weight: 700;
       color: var(--gold-dark);
       font-family: 'Cinzel', serif;
-      font-size: 7.5pt;
+      font-size: 9.5pt;
+    }
+
+    .page.cover-dark .page-num { color: var(--gold-light); }
+
+    .page-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 0;
     }
 
     h1, h2, h3, h4 {
       font-family: 'Cinzel', serif;
       font-weight: 700;
       color: var(--navy-deep);
-      line-height: 1.18;
+      line-height: 1.22;
     }
 
-    .section-title { font-size: 15.5pt; letter-spacing: 0.6px; margin-bottom: 3px; text-transform: uppercase; color: var(--navy-deep); }
+    .section-title {
+      font-size: 16.5pt;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      color: var(--navy-deep);
+    }
 
-    .section-subtitle { font-family: "Playfair Display", serif; font-style: italic; font-size: 9.8pt; color: var(--gold-dark); margin-bottom: 8px; font-weight: 600; }
+    .section-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 11pt;
+      color: var(--gold-dark);
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
 
-    p { margin-bottom: 5px; text-align: justify; hyphens: auto; }
-    p.lead { font-size: 10.8pt; font-weight: 500; color: var(--navy-light); line-height: 1.45; margin-bottom: 9px; }
+    p {
+      margin-bottom: 6px;
+      text-align: justify;
+      hyphens: auto;
+      font-size: var(--base-font-size);
+      line-height: 1.48;
+    }
+
+    p.lead {
+      font-size: calc(var(--base-font-size) * 1.06);
+      font-weight: 500;
+      color: var(--navy-light);
+      line-height: 1.45;
+      margin-bottom: 7px;
+    }
 
     .card {
       background: var(--parchment-card);
-      border: 1px solid var(--border-gold);
+      border: 1.5px solid var(--border-gold);
       border-radius: 5px;
-      padding: 6px 8px;
+      padding: 7px 11px;
       margin-bottom: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      font-size: var(--base-font-size);
+      line-height: 1.45;
     }
 
     .card-dark {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(212, 175, 55, 0.3);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(212, 175, 55, 0.35);
       border-radius: 5px;
-      padding: 7px 9px;
+      padding: 7px 11px;
       margin-bottom: 6px;
+      font-size: var(--base-font-size);
+      line-height: 1.45;
+    }
+
+    .gold-box {
+      border-left: 3.5px solid var(--gold);
+      background: #fdfaf2;
+      padding: 6px 10px;
+      margin: 6px 0;
+      border-radius: 0 4px 4px 0;
+      font-size: var(--base-font-size);
+      line-height: 1.45;
     }
 
     .badge {
       display: inline-block;
-      padding: 1px 5px;
-      border-radius: 3px;
-      font-size: 6.8pt;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 8.5pt;
       font-weight: 700;
       letter-spacing: 0.5px;
       text-transform: uppercase;
@@ -203,6 +265,105 @@
     .badge-rgb-g { background: #dcfce7; color: #166534; border: 1px solid #4ade80; }
     .badge-rgb-b { background: #dbeafe; color: #1e40af; border: 1px solid #60a5fa; }
     .badge-gold { background: #fef9c3; color: #854d0e; border: 1px solid #facc15; }
+    .badge-black { background: #1f2937; color: #f9fafb; }
+    .badge-white { background: #ffffff; color: #1f2937; border: 1px solid #d1d5db; }
+
+    /* Układ pojedynczego produktu (1 na stronę) */
+    .product-layout {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .product-image-container {
+      width: 44%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 5px;
+      padding: 5px;
+      flex-shrink: 0;
+    }
+
+    .product-image-container img {
+      max-width: 100%;
+      max-height: 115mm;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+
+    .product-info {
+      width: 56%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .product-spec-list {
+      list-style: none;
+      font-size: var(--base-font-size);
+      margin-bottom: 6px;
+      line-height: 1.45;
+    }
+
+    .product-spec-list li {
+      margin-bottom: 4px;
+      padding-left: 13px;
+      position: relative;
+    }
+
+    .product-spec-list li::before {
+      content: '◆';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 7pt;
+      top: 2px;
+    }
+
+    .buy-card {
+      background: linear-gradient(135deg, #fefcf6 0%, #f7f1e1 100%);
+      border: 1.5px solid var(--gold);
+      border-radius: 5px;
+      padding: 7px 11px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(170, 130, 20, 0.12);
+    }
+
+    .buy-card h4 {
+      font-size: 11.5pt;
+      color: var(--gold-dark);
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .buy-card p {
+      font-size: calc(var(--base-font-size) * 0.92);
+      color: var(--text-dark);
+      margin-bottom: 5px;
+      text-align: center;
+      line-height: 1.38;
+    }
+
+    .buy-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #aa8214 0%, #d4af37 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 9pt;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 5px 12px;
+      border-radius: 4px;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
 
     .grid-2 {
       display: grid;
@@ -210,27 +371,84 @@
       gap: 7px;
     }
 
-    /* Product layout for 2 products per page */
+    /* 6 modeli na jednej stronie (dla broszury 4 strony) */
+    .rosaries-grid-6 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin: 4px 0;
+      flex: 1;
+    }
+    .rosary-item-box {
+      background: #ffffff;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 4px;
+      padding: 5px 6px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .rosary-item-box img {
+      width: 32mm;
+      height: 32mm;
+      object-fit: contain;
+      border-radius: 4px;
+      background: #faf8f5;
+      padding: 2px;
+      border: 1px solid #f0e6d2;
+      flex-shrink: 0;
+    }
+    .rosary-item-text {
+      flex: 1;
+      font-size: 8.5pt;
+      line-height: 1.32;
+    }
+    .rosary-item-text h4 {
+      font-size: 9.5pt;
+      color: var(--navy-deep);
+      margin-bottom: 2px;
+    }
+    .buy-btn-mini {
+      display: inline-block;
+      background: linear-gradient(135deg, #aa8214 0%, #d4af37 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 7.5pt;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-decoration: none;
+      margin-top: 2px;
+    }
+
+    /* 2 produkty na stronę (dla broszur 8 i 12 stron) */
     .pair-layout {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 7px;
       flex: 1;
-      justify-content: space-around;
+      justify-content: space-between;
     }
-
     .product-row-card {
       display: flex;
-      gap: 10px;
+      gap: 9px;
       background: #ffffff;
-      border: 1px solid var(--border-gold);
+      border: 1.5px solid var(--border-gold);
       border-radius: 5px;
-      padding: 7px 9px;
+      padding: 6px 9px;
       align-items: center;
+      flex: 1;
     }
-
-    .product-row-card img { width: 42mm; height: 52mm; object-fit: contain; border-radius: 4px; background: #faf8f5; padding: 4px; border: 1px solid #f0e6d2; flex-shrink: 0; }
-
+    .product-row-card img {
+      width: 38mm;
+      height: 48mm;
+      object-fit: contain;
+      border-radius: 4px;
+      background: #faf8f5;
+      padding: 3px;
+      border: 1px solid #f0e6d2;
+      flex-shrink: 0;
+    }
     .product-row-info {
       flex: 1;
       display: flex;
@@ -238,47 +456,62 @@
       justify-content: space-between;
       height: 100%;
     }
-
-    .product-row-info h4 { font-size: 10.2pt; color: var(--navy-deep); margin-bottom: 3px; }
-
-    .product-row-info p { font-size: 8.8pt; line-height: 1.42; margin-bottom: 5px; }
-
-    .product-row-info ul { list-style: none; font-size: 8.5pt; margin-bottom: 6px; }
-
+    .product-row-info h4 {
+      font-size: 10.5pt;
+      color: var(--navy-deep);
+      margin-bottom: 2px;
+    }
+    .product-row-info p {
+      font-size: calc(var(--base-font-size) * 0.9);
+      line-height: 1.38;
+      margin-bottom: 3px;
+    }
+    .product-row-info ul {
+      list-style: none;
+      font-size: calc(var(--base-font-size) * 0.85);
+      margin-bottom: 4px;
+    }
     .product-row-info ul li {
-      padding-left: 10px;
+      padding-left: 11px;
       position: relative;
       margin-bottom: 2px;
     }
-
     .product-row-info ul li::before {
       content: '◆';
       position: absolute;
       left: 0;
       color: var(--gold);
-      font-size: 5pt;
-      top: 1.5px;
+      font-size: 6pt;
+      top: 2px;
+    }
+    .buy-btn-small {
+      display: inline-block;
+      background: linear-gradient(135deg, #aa8214 0%, #d4af37 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 8pt;
+      text-transform: uppercase;
+      padding: 3.5px 10px;
+      border-radius: 3px;
+      text-decoration: none;
+      align-self: flex-start;
     }
 
-    .buy-btn-small { display: inline-block; background: linear-gradient(135deg, #aa8214 0%, #d4af37 100%); color: #ffffff; font-weight: 700; font-size: 7.8pt; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; text-decoration: none; align-self: flex-start; }
   </style>
 </head>
 <body>
 
 <div class="booklet-container">
+  <!-- STRONA 1: OKŁADKA / STRONA TYTUŁOWA Z PEŁNĄ TREŚCIĄ -->
+  <div class="page cover-dark" style="justify-content: space-between; text-align: center;">
+    <div>
+      <div style="border: 1.5px solid var(--gold); padding: 4px 8px; border-radius: 4px; margin-bottom: 5px;">
+        <p style="font-family: 'Cinzel', serif; font-size: 9pt; letter-spacing: 2px; color: var(--gold-light); margin: 0; text-align: center; text-transform: uppercase;">
+          Oficjalny Przewodnik Duchowy i Wydawniczy
+        </p>
+      </div>
 
-  <!-- =================================================================== -->
-  <!-- STRONA 1: OKŁADKA GŁÓWNA -->
-  <!-- =================================================================== -->
-  <div class="page cover-dark" style="text-align: center; justify-content: space-around;">
-    <div style="border: 2px solid var(--gold); padding: 7px 5px; border-radius: 4px; margin-bottom: 4px;">
-      <p style="font-family: 'Cinzel', serif; font-size: 7.2pt; letter-spacing: 2.8px; color: var(--gold-light); margin: 0; text-align: center; text-transform: uppercase;">
-        Duchowa Droga Przez Pismo Święte i Dzieje Kościoła
-      </p>
-    </div>
-
-    <div style="margin: 8px 0;">
-      <svg width="44" height="64" viewBox="0 0 100 140" style="margin: 0 auto 8px auto; display: block; filter: drop-shadow(0 0 10px rgba(212,175,55,0.7));">
+      <svg width="38" height="52" viewBox="0 0 100 140" style="margin: 0 auto 4px auto; display: block; filter: drop-shadow(0 0 8px rgba(212,175,55,0.7));">
         <rect x="42" y="10" width="16" height="120" rx="4" fill="url(#goldGrad)" />
         <rect x="15" y="38" width="70" height="16" rx="4" fill="url(#goldGrad)" />
         <circle cx="50" cy="46" r="14" fill="none" stroke="#fff" stroke-width="3" opacity="0.85" />
@@ -291,131 +524,154 @@
         </defs>
       </svg>
 
-      <h1 style="font-size: 17pt; letter-spacing: 1.2px; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.7); margin-bottom: 4px;">
+      <h1 style="font-size: 15.5pt; letter-spacing: 1.2px; color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); margin-bottom: 2px;">
         RÓŻANIEC HISTORII ZBAWIENIA
       </h1>
-      <div style="width: 55px; height: 2px; background: var(--gold); margin: 5px auto;"></div>
-      <h2 style="font-size: 10.5pt; font-weight: 400; color: var(--gold-light); letter-spacing: 1.8px; margin-bottom: 7px;">
-        RHZ365 & WIDOKI NA RAJ
+      <div style="width: 50px; height: 2px; background: var(--gold); margin: 2px auto 4px auto;"></div>
+      <h2 style="font-size: 10.5pt; font-weight: 600; color: var(--gold-light); letter-spacing: 1.2px; margin-bottom: 5px;">
+        RHZ365 &bull; WIDOKI NA RAJ &bull; 175 TAJEMNIC
       </h2>
-      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 8.8pt; color: #d0d7e2; max-width: 105mm; margin: 0 auto; text-align: center;">
-        Wymiar Cyfrowy & Kolekcja Fizycznych Różańców niosących Tajemnicę Misji Barw i Kolorów
-      </p>
-    </div>
 
-    <div class="card-dark" style="margin: 8px 0; padding: 8px 10px; background: rgba(12,23,40,0.7); border: 1px solid rgba(212,175,55,0.5);">
-      <p style="font-size: 7.6pt; color: #f0f3f8; margin-bottom: 5px; text-align: center;">
-        <em>„Światłość w ciemności świeci i ciemność jej nie ogarnęła.”</em><br>
-        <span style="color: var(--gold-light); font-size: 7pt;">(Ewangelia według św. Jana 1, 5)</span>
-      </p>
-      <div style="display: flex; justify-content: center; gap: 7px; flex-wrap: wrap; margin-top: 5px;">
-        <span class="badge" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid var(--gold);">365 Dni Modlitwy</span>
-        <span class="badge" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid var(--gold);">Lektor Online</span>
-        <span class="badge" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid var(--gold);">6 Modeli Różańców</span>
+      <!-- Blok wprowadzający: wymiar cyfrowy i fizyczny -->
+      <div class="card-dark" style="text-align: justify; margin-bottom: 5px; background: rgba(12,23,40,0.78); border: 1px solid rgba(212,175,55,0.45); padding: 6px 9px;">
+        <p style="font-size: var(--base-font-size); line-height: 1.42; color: #f1f5f9; margin-bottom: 4px;">
+          <strong>Różaniec Historii Zbawienia</strong> to całoroczna droga kontemplacji dziejów zbawienia od stworzenia świata po Paruzję. Dzieło łączy w sobie dwa nierozerwalne wymiary:
+        </p>
+        <p style="font-size: var(--base-font-size); line-height: 1.4; color: #e2e8f0; margin-bottom: 4px;">
+          🌐 <strong>Wymiar Cyfrowy (widokinaraj.pl):</strong> Nowoczesny portal z automatycznym odczytem przez lektora audio, interaktywną reprezentacją paciorków i rozważaniami z 4 tomów „Widoków na Raj”.
+        </p>
+        <p style="font-size: var(--base-font-size); line-height: 1.4; color: #e2e8f0; margin: 0;">
+          📿 <strong>Wymiar Fizyczny (6 Modeli):</strong> Unikalna kolekcja różańców niosących tajemnicę Misji Barw i Kolorów (RGB i CMYK) – od białego i czarnego krzyża po inskrypcje miłości „IN LOVE”.
+        </p>
+      </div>
+
+      <!-- Pismo Święte i Zachęta do zakupu -->
+      <div class="card-dark" style="text-align: center; margin-bottom: 5px; background: rgba(212,175,55,0.12); border: 1.5px solid var(--gold); padding: 5px 9px;">
+        <p style="font-size: var(--base-font-size); font-style: italic; color: #fef08a; margin-bottom: 2px;">
+          „Światłość w ciemności świeci i ciemność jej nie ogarnęła.” (J 1, 5)
+        </p>
+        <p style="font-size: calc(var(--base-font-size) * 0.92); color: #ffffff; margin: 0;">
+          Wybierz swój różaniec na <strong>{{ website_url }}</strong> i wejdź na drogę codziennej modlitwy, która przemienia serce i wnosi Boży pokój.
+        </p>
       </div>
     </div>
 
     <div>
-      <p style="font-size: 7.2pt; color: var(--gold-light); letter-spacing: 1px; margin-bottom: 2px; text-align: center; text-transform: uppercase;">
-        Oficjalny Przewodnik Wydawniczy
-      </p>
-      <p style="font-size: 8.2pt; font-weight: 700; color: #ffffff; letter-spacing: 1.5px; margin: 0; text-align: center;">
-        {{ website_url }}
-      </p>
+      <div style="display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 4px;">
+        <span class="badge" style="background: rgba(255,255,255,0.16); color: #fff; border: 1px solid var(--gold);">365 Dni Modlitwy</span>
+        <span class="badge" style="background: rgba(255,255,255,0.16); color: #fff; border: 1px solid var(--gold);">Lektor Online</span>
+        <span class="badge" style="background: rgba(255,255,255,0.16); color: #fff; border: 1px solid var(--gold);">6 Modeli Różańców</span>
+        <span class="badge" style="background: rgba(255,255,255,0.16); color: #fff; border: 1px solid var(--gold);">Tomy I–IV WnR</span>
+      </div>
+      <div class="page-footer" style="border-top-color: rgba(212,175,55,0.4); color: var(--gold-light);">
+        <span>{{ website_url }}</span>
+        <span>WYDANIE DRUKARSKIE &bull; AMAZON KDP</span>
+      </div>
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- STRONA 2: WPROWADZENIE & CZTERY TOMY WNR365 -->
-  <!-- =================================================================== -->
+  <!-- STRONA: CZTERY TOMY WIDOKÓW NA RAJ -->
   <div class="page">
     <div>
       <div class="page-header">
         <span>Integralność Dzieła</span>
-        <span>Wprowadzenie & WnR365</span>
+        <span>RHZ365 & WnR365</span>
       </div>
 
-      <h2 class="section-title">Droga ku Pełni Światła</h2>
-      <h3 class="section-subtitle">Różaniec RHZ365 i cztery tomy rozważań „Widoków na Raj”</h3>
+      <h2 class="section-title">Cztery Tomy „Widoków na Raj”</h2>
+      <h3 class="section-subtitle">Duchowa literatura towarzysząca modlitwie w rytmie czterech pór roku</h3>
 
       <p class="lead">
-        <strong>Różaniec Historii Zbawienia (RHZ365)</strong> to wielkie duchowe dzieło obejmujące 175 tajemnic – od stworzenia świata i przymierzy Starego Testamentu, przez życie, śmierć i Zmartwychwstanie Chrystusa, aż po czasy Kościoła i Paruzję.
+        Modlitwie różańcowej RHZ365 towarzyszy czterotomowe dzieło literacko-duchowe <strong>„Widoki na Raj” (WnR365)</strong>. Każdy tom odpowiada porom roku w przyrodzie i etapom dojrzewania ludzkiej duszy:
       </p>
 
-      <p>
-        Modlitwie towarzyszy dzieło literacko-duchowe <strong>„Widoki na Raj” (WnR365)</strong> podzielone na cztery pory roku. Każdy tom prowadzi czytelnika przez biblijne rozważania, ukazując zbawczą obecność Boga w każdej chwili ludzkiego losu:
-      </p>
-
-      <div class="grid-2" style="margin: 6px 0;">
-        <div class="card" style="border-left: 3px solid #1e293b;">
-          <h4 style="font-size: 7.8pt; color: var(--navy-deep); margin-bottom: 2px;">Tom I: Ziemia (Zima)</h4>
-          <p style="font-size: 7.2pt; margin: 0;">Fundament stworzenia, tęsknota za Rajem, przymierza patriarchów i proroctwa.</p>
+      <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 6px;">
+        <div style="background: #f1f5f9; padding: 6px 9px; border-radius: 4px; border-left: 3.5px solid #475569; font-size: var(--base-font-size);">
+          <strong style="color: #1e293b;">Tom I – Ziemia (Zima):</strong> Czas ciszy, ogołocenia i tęsknoty za Utraconym Rajem. Odkrywanie korzeni wiary w przymierzach z Abrahamem, Izaakiem i Jakubem.
         </div>
-        <div class="card" style="border-left: 3px solid #059669;">
-          <h4 style="font-size: 7.8pt; color: #065f46; margin-bottom: 2px;">Tom II: Wiosna</h4>
-          <p style="font-size: 7.2pt; margin: 0;">Zwiastowanie, wcielenie Słowa i publiczna działalność Jezusa Chrystusa.</p>
+        <div style="background: #f0fdf4; padding: 6px 9px; border-radius: 4px; border-left: 3.5px solid #16a34a; font-size: var(--base-font-size);">
+          <strong style="color: #166534;">Tom II – Wiosna:</strong> Zwiastowanie, Wcielenie Słowa i publiczna działalność Jezusa. Rozkwit łaski, cudowne uzdrowienia i orędzie ośmiu błogosławieństw.
         </div>
-        <div class="card" style="border-left: 3px solid #b45309;">
-          <h4 style="font-size: 7.8pt; color: #78350f; margin-bottom: 2px;">Tom III: Lato</h4>
-          <p style="font-size: 7.2pt; margin: 0;">Pascha Zbawiciela: Ostatnia Wieczerza, Męka, Krzyż i Chwalebne Zmartwychwstanie.</p>
+        <div style="background: #fefce8; padding: 6px 9px; border-radius: 4px; border-left: 3.5px solid #ca8a04; font-size: var(--base-font-size);">
+          <strong style="color: #854d0e;">Tom III – Lato:</strong> Pełnia światła i paschalny żar miłości. Wieczernik, Ogrójec, Męka na Krzyżu i poranek Zmartwychwstania – zwycięstwo życia nad śmiercią.
         </div>
-        <div class="card" style="border-left: 3px solid #4338ca;">
-          <h4 style="font-size: 7.8pt; color: #312e81; margin-bottom: 2px;">Tom IV: Jesień</h4>
-          <p style="font-size: 7.2pt; margin: 0;">Zesłanie Ducha Świętego, misja apostolska Kościoła i ostateczna Paruzja.</p>
+        <div style="background: #fff7ed; padding: 6px 9px; border-radius: 4px; border-left: 3.5px solid #ea580c; font-size: var(--base-font-size);">
+          <strong style="color: #9a3412;">Tom IV – Jesień:</strong> Zesłanie Ducha Świętego, misja apostolska Kościoła, świadectwo męczenników i zbieranie plonów wiary w perspektywie Paruzji.
         </div>
       </div>
 
-      <div class="card" style="background: #fdfaf2; border: 1px solid var(--border-gold); margin-top: 4px;">
-        <p style="font-size: 7.4pt; margin: 0; text-align: justify;">
-          Różaniec i tomy WnR365 tworzą jedną całość: lektura pogłębia rozumienie tajemnic, a modlitwa przemienia wiedzę w żywe spotkanie z Bogiem w sercu człowieka.
-        </p>
+      <div class="gold-box" style="margin: 0;">
+        <strong>Skompletuj całą kolekcję:</strong> Cztery tomy rozważań są dostępne w wersji drukowanej oraz na platformie internetowej. Wspólnie z różańcem tworzą kompletną szkołę życia wewnętrznego.
       </div>
     </div>
 
     <div class="page-footer">
-      <span>{{ website_url }}</span>
+      <span>TOMY I–IV • WIDOKI NA RAJ</span>
       <span class="page-num">2</span>
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- STRONA 3: WYMIAR CYFROWY & KALENDARZ 365 DNI -->
-  <!-- =================================================================== -->
+  <!-- STRONA: ARCHITEKTURA I KALENDARZ 365 DNI -->
   <div class="page">
     <div>
       <div class="page-header">
-        <span>Wymiar Cyfrowy & Kalendarium</span>
-        <span>widokinaraj.pl</span>
+        <span>Architektura Modlitwy</span>
+        <span>Cykl 365 Dni</span>
       </div>
 
-      <h2 class="section-title">Modlitwa w Wymiarze Cyfrowym</h2>
-      <h3 class="section-subtitle">Platforma widokinaraj.pl, lektor online i 365-dniowy rytm roku</h3>
+      <h2 class="section-title">Architektura Roku Modlitwy</h2>
+      <h3 class="section-subtitle">175 tajemnic ułożonych w matematycznie harmonijny rytm roku</h3>
 
-      <div class="card" style="border-left: 3px solid var(--navy-deep); margin-bottom: 8px;">
-        <h4 style="font-size: 8.2pt; color: var(--navy-deep); margin-bottom: 3px;">
-          🌐 Inteligentny Serwis Modlitewny widokinaraj.pl
-        </h4>
-        <p style="font-size: 7.5pt; line-height: 1.38; margin-bottom: 4px;">
-          Wchodząc na stronę <code>widokinaraj.pl</code>, użytkownik natychmiast otrzymuje tajemnicę przypisaną do bieżącego dnia roku liturgicznego. Strona eliminuje chaos i pozwala skupić się wyłącznie na spotkaniu ze Słowem.
-        </p>
-        <p style="font-size: 7.3pt; color: var(--text-muted); margin: 0;">
-          &bull; <strong>Automatyczny Lektor Audio:</strong> Spokojny, profesjonalny głos odczytuje medytację, umożliwiając modlitwę w podróży, w domu lub na spacerze.<br>
-          &bull; <strong>Interaktywny Różaniec:</strong> Dynamiczne podświetlanie paciorków odzwierciedla postęp modlitwy.
+      <div class="card" style="text-align: center; background: #fdfaf2; border: 1.5px solid var(--gold); padding: 5px 8px; margin-bottom: 5px;">
+        <span style="font-family: 'Cinzel', serif; font-size: 11pt; font-weight: 700; color: var(--gold-dark);">
+          7 Etapów &times; 5 Części &times; 5 Tajemnic = 175 Tajemnic Zbawienia
+        </span>
+        <p style="font-size: calc(var(--base-font-size) * 0.9); color: var(--text-muted); margin: 2px 0 0 0; text-align: center;">
+          Dokładnie jedna tajemnica na każdy dzień &bull; Dwa pełne cykle w ciągu roku
         </p>
       </div>
 
-      <div class="card" style="border-left: 3px solid var(--gold); margin-bottom: 6px;">
-        <h4 style="font-size: 8.2pt; color: var(--gold-dark); margin-bottom: 3px;">
-          📅 Architektura Roku: Dwa Cykle i Tygodnie Ciszy
-        </h4>
-        <div style="font-size: 7.3pt; line-height: 1.4;">
-          <p style="margin-bottom: 3px;">
-            &bull; <strong>I Cykl (175 Dni):</strong> Od Nowego Roku do połowy czerwca – pełne przejście przez 175 tajemnic zbawienia.<br>
-            &bull; <strong>Letni Tydzień Ciszy (7 Dni):</strong> Czas osobistej kontemplacji i integracji owoców modlitwy.<br>
-            &bull; <strong>II Cykl (175 Dni):</strong> Ponowne, pogłębione przejście przez te same tajemnice w drugiej połowie roku.<br>
-            &bull; <strong>17 Grudnia – Dzień Bożego Miłosierdzia:</strong> Wyjątkowy dzień zwieńczenia drogi.<br>
-            &bull; <strong>Adwentowy Tydzień Ciszy:</strong> Oczekiwanie na narodzenie Pana.
-          </p>
+      <h4 style="font-size: 10.5pt; color: var(--navy-deep); margin: 3px 0 2px 0; text-transform: uppercase;">
+        Struktura Siedmiu Wielkich Etapów
+      </h4>
+      <div style="font-size: var(--base-font-size); line-height: 1.4; margin-bottom: 4px;">
+        <p style="margin-bottom: 2.5px;">
+          <strong>Etapy I–III (Stary Testament):</strong> Od stworzenia świata, przez przymierza z Noem i Abrahamem, Wyjście z Egiptu, rządy królów i głosy proroków tęskniących za Mesjaszem.
+        </p>
+        <p style="margin-bottom: 2.5px;">
+          <strong>Etap IV (Chrystus i Maryja):</strong> Serce historii zbawienia. Wcielenie, życie ukryte w Nazarecie, męka, śmierć, zmartwychwstanie oraz mistyczne <em>Tajemnice Ciszy</em>.
+        </p>
+        <p style="margin: 0;">
+          <strong>Etapy V–VII (Kościół i Wieczność):</strong> Dzieje Apostolskie, świadectwo męczenników, zmagania wieków aż po ostateczny triumf Boga i Nowe Jeruzalem.
+        </p>
+      </div>
+
+      <h4 style="font-size: 10.5pt; color: var(--gold-dark); margin: 3px 0 2px 0; text-transform: uppercase;">
+        Całoroczny Zegar Modlitwy (365 Dni)
+      </h4>
+      <div style="background: #ffffff; border: 1px solid var(--border-gold); border-radius: 4px; padding: 4px 7px; font-size: calc(var(--base-font-size) * 0.92); line-height: 1.38;">
+        <div style="display: flex; justify-content: space-between;">
+          <span><strong>I Cykl (175 dni):</strong> 25 grudnia – 17 czerwca</span>
+          <span class="badge badge-gold">175 dni</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+          <span><em>&bull; Letni Tydzień Ciszy i Refleksji:</em> 18 – 24 czerwca</span>
+          <span>7 dni</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span><strong>II Cykl (175 dni):</strong> 25 czerwca – 16 grudnia</span>
+          <span class="badge badge-gold">175 dni</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: #991b1b;">
+          <span><strong>&bull; Dzień Bożego Miłosierdzia:</strong> 17 grudnia (Koronka)</span>
+          <span class="badge badge-rgb-r">1 dzień</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+          <span><em>&bull; Tydzień Ciszy Adwentowej:</em> 18 – 24 grudnia</span>
+          <span>7 dni</span>
+        </div>
+        <div style="border-top: 1px solid #e2e8f0; margin-top: 2px; padding-top: 2px; text-align: center; font-weight: 700; color: var(--navy-deep);">
+          175 + 7 + 175 + 1 + 7 = 365 DNI BOŻEJ ŁASKI
         </div>
       </div>
     </div>
@@ -426,114 +682,113 @@
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- STRONA 4: TEOLOGIA BARW: RGB, CMYK & INSKRYPCJE -->
-  <!-- =================================================================== -->
+  <!-- STRONA: TEOLOGIA ŚWIATŁA (RGB) -->
   <div class="page">
     <div>
       <div class="page-header">
-        <span>Teologia Światła & Barw</span>
-        <span>RGB &bull; CMYK &bull; IN LOVE</span>
+        <span>Teologia Światła</span>
+        <span>Misja Barw i Kolorów</span>
       </div>
 
-      <h2 class="section-title">Mistyka Kolorów i Krzyża</h2>
-      <h3 class="section-subtitle">Schemat RGB, odwrócony CMYK i zbawienie z ciemności ku światłu</h3>
+      <h2 class="section-title">Teologia Światła: Schemat RGB</h2>
+      <h3 class="section-subtitle">„Bóg oddzielił światłość od ciemności i było to dobre” (Rdz 1, 4)</h3>
 
-      <div class="grid-2" style="margin-bottom: 6px;">
-        <div class="card" style="border-top: 3px solid var(--navy-deep);">
-          <h4 style="font-size: 7.8pt; color: var(--navy-deep); margin-bottom: 3px;">
-            Światło Boże (RGB)
-          </h4>
-          <p style="font-size: 7.2pt; line-height: 1.35; margin-bottom: 4px;">
-            Schemat addytywny: zbieg trzech promieni rodzi oślepiającą biel Bożej chwały:
-          </p>
-          <p style="font-size: 7pt; margin: 0;">
-            <span class="badge badge-rgb-r">R</span> <strong>Jezus Chrystus</strong> (Krew i Wiara)<br>
-            <span class="badge badge-rgb-g">G</span> <strong>Duch Święty</strong> (Życie i Nadzieja)<br>
-            <span class="badge badge-rgb-b">B</span> <strong>Bóg Ojciec</strong> (Prawda i Miłość)
-          </p>
-        </div>
+      <p>
+        Wszystkie 6 modeli różańców RHZ niosą w sobie tajemnicę <strong>Misji Barw i Kolorów</strong>. To głęboko przemyślana katecheza oparta na biblijnej prawdzie o stworzeniu, upadku i odkupieniu człowieka.
+      </p>
 
-        <div class="card" style="border-top: 3px solid #9a3412;">
-          <h4 style="font-size: 7.8pt; color: #9a3412; margin-bottom: 3px;">
-            Odwrócony CMYK (Odkupienie)
-          </h4>
-          <p style="font-size: 7.2pt; line-height: 1.35; margin-bottom: 4px;">
-            Grzech jako rozbicie kryształu światła i upadek w materię ziemi:
-          </p>
-          <p style="font-size: 7pt; margin: 0;">
-            <strong>K</strong> – ciemność i proch ziemi.<br>
-            <strong>Y</strong> – zdrada Judasza za 30 srebrników.<br>
-            <strong>C & M</strong> – rozpacz i pycha człowieka.<br>
-            <em>Krzyż obraca Y w R (Miłość)!</em>
-          </p>
-        </div>
+      <!-- SVG Diagram RGB -->
+      <div style="text-align: center; margin: 3px 0 5px 0;">
+        <svg width="170" height="70" viewBox="0 0 240 100" style="margin: 0 auto; display: block;">
+          <circle cx="95" cy="45" r="35" fill="rgba(220, 38, 38, 0.75)" />
+          <circle cx="145" cy="45" r="35" fill="rgba(5, 150, 105, 0.75)" />
+          <circle cx="120" cy="75" r="35" fill="rgba(37, 99, 235, 0.75)" />
+          <circle cx="120" cy="52" r="13" fill="#ffffff" filter="drop-shadow(0 0 5px #fff)" />
+          <text x="120" y="55" font-family="'Cinzel', serif" font-size="7" font-weight="700" fill="#1e293b" text-anchor="middle">BIEL</text>
+          <text x="70" y="35" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="700" fill="#dc2626">R - Jezus</text>
+          <text x="170" y="35" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="700" fill="#059669">G - Duch Św.</text>
+          <text x="120" y="98" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="700" fill="#2563eb" text-anchor="middle">B - Ojciec</text>
+        </svg>
       </div>
 
-      <div class="card" style="border-left: 3px solid var(--gold); margin-bottom: 6px;">
-        <h4 style="font-size: 7.8pt; color: var(--gold-dark); margin-bottom: 3px;">
-          Paciorki „IN LOVE” oraz „M” i „J”
+      <div class="card" style="background: #f8fafc; margin-bottom: 4px;">
+        <h4 style="font-size: 10.5pt; color: var(--navy-deep); margin-bottom: 2px;">
+          Addytywny Kod Światła Bożej Chwały
         </h4>
-        <p style="font-size: 7.3pt; line-height: 1.35; margin-bottom: 3px;">
-          Przezroczyste paciorki z literami <strong>„I”</strong> oraz <strong>„N”</strong> obejmujące paciorki RGB niosą przesłanie: <em>„Jesteś zanurzony W MIŁOŚCI (IN LOVE) Stwórcy”</em>. Światło w ciemności świeci i ciemność go nie ogarnęła.
+        <p style="margin: 0;">
+          W optyce fizycznej barwy addytywne (Red, Green, Blue) to składowe czystego światła. Nałożone na siebie w pełni tworzą <strong>czystą Biel</strong> – symbol Bożej świętości. W połowie tworzą <strong>szarość</strong> (ludzka letniość), a wyłączone stają się <strong>przezroczystością w ciemności</strong>, gdyż światło w ciemności świeci.
         </p>
-        <p style="font-size: 7.3pt; line-height: 1.35; margin: 0;">
-          Dwa kluczowe paciorki łącznikowe: <strong>„M”</strong> (Maryja – Matka Miłosierdzia, Miłość) oraz <strong>„J”</strong> (Jezus Chrystus – Jedność i Zbawienie).
-        </p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 3px; margin-bottom: 4px;">
+        <div style="display: flex; align-items: center; gap: 5px; background: #fff5f5; padding: 2.5px 5px; border-radius: 4px; border: 1px solid #fed7d7;">
+          <span class="badge badge-rgb-r" style="width: 18px; text-align: center;">R</span>
+          <span style="font-size: var(--base-font-size);"><strong>Czerwony &bull; Jezus Chrystus:</strong> Wiara, Krew Przymierza, miłość ofiarna aż po krzyż.</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px; background: #f0fdf4; padding: 2.5px 5px; border-radius: 4px; border: 1px solid #bbf7d0;">
+          <span class="badge badge-rgb-g" style="width: 18px; text-align: center;">G</span>
+          <span style="font-size: var(--base-font-size);"><strong>Zielony &bull; Duch Święty:</strong> Nadzieja, nowe życie, odnowienie oblicza ziemi.</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px; background: #eff6ff; padding: 2.5px 5px; border-radius: 4px; border: 1px solid #bfdbfe;">
+          <span class="badge badge-rgb-b" style="width: 18px; text-align: center;">B</span>
+          <span style="font-size: var(--base-font-size);"><strong>Niebieski &bull; Bóg Ojciec:</strong> Nieskończona Miłość Stwórcy, Królestwo Niebieskie.</span>
+        </div>
+      </div>
+
+      <div class="gold-box" style="margin: 0;">
+        Pomiędzy przezroczystymi koralikami początku różańca umieszczone są te trzy barwy RGB, wskazując, że całe dzieło stworzenia i odkupienia wypływa z Trójcy Przenajświętszej.
       </div>
     </div>
 
     <div class="page-footer">
-      <span>{{ website_url }}</span>
+      <span>SCHEMAT RGB &bull; ŚWIATŁO BOŻE</span>
       <span class="page-num">4</span>
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- STRONA 5: MODELE 1 & 2 (PEŁNE RÓŻAŃCE) -->
-  <!-- =================================================================== -->
+  <!-- STRONA: MODELE 1 & 2 -->
   <div class="page">
     <div>
       <div class="page-header">
         <span>Kolekcja Różańców RHZ</span>
-        <span>Modele 1 & 2 &bull; Różańce Pełne</span>
+        <span>Modele 1 & 2</span>
       </div>
 
-      <h2 class="section-title">Pełne Różańce Kontemplacji</h2>
-      <h3 class="section-subtitle">Pełny wymiar modlitwy z Białym Krzyżem (RGB) oraz Czarnym Krzyżem (CMYK)</h3>
+      <h2 class="section-title">Modele 1 i 2 Różańców</h2>
+      <h3 class="section-subtitle">Namacalne narzędzia modlitwy w kodzie barwnym RGB i CMYK</h3>
 
       <div class="pair-layout">
         <!-- Model 1 -->
         <div class="product-row-card">
-          <img src="images/model1_pelny_bialy.jpg" alt="Model 1">
+          <img src="images/model1_pelny_bialy.jpg" alt="Model 1: Pełny z Białym Krzyżem">
           <div class="product-row-info">
             <div>
-              <h4>Model 1: Pełny Różaniec z Białym Krzyżem</h4>
-              <p>Klasyczny pełny różaniec światłości Bożej. Zwieńczony śnieżnobiałym krzyżem symbolizującym Zmartwychwstanie i chwałę Nieba.</p>
+              <h4>Model 1: Pełny z Białym Krzyżem</h4>
+              <p>Klasyczny pełny różaniec światłości Bożej. Zwieńczony śnieżnobiałym krzyżem Zmartwychwstania.</p>
               <ul>
-                <li>10 czarnych matowych onyksów (przejście przez ciemność)</li>
+                <li>10 czarnych onyksów (przejście przez ciemność)</li>
                 <li>30 paciorków w barwach RGB (światłość Boża)</li>
-                <li>10 świetlistych pereł oraz paciorki „IN LOVE”</li>
+                <li>10 pereł oraz paciorki IN LOVE</li>
               </ul>
             </div>
-            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów Model 1 na widokinaraj.pl &raquo;</a>
+            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów na widokinaraj.pl &raquo;</a>
           </div>
         </div>
 
         <!-- Model 2 -->
         <div class="product-row-card">
-          <img src="images/model2_pelny_czarny.jpg" alt="Model 2">
+          <img src="images/model2_pelny_czarny.jpg" alt="Model 2: Pełny z Czarnym Krzyżem">
           <div class="product-row-info">
             <div>
-              <h4>Model 2: Pełny Różaniec z Czarnym Krzyżem</h4>
-              <p>Różaniec z hebanowym krzyżem przypominającym o cenie naszego odkupienia i tajemnicy odwróconego CMYK.</p>
+              <h4>Model 2: Pełny z Czarnym Krzyżem</h4>
+              <p>Różaniec z hebanowym krzyżem przypominającym o cenie odkupienia i odwróconym CMYK.</p>
               <ul>
                 <li>Paciorki CMYK obrazujące drogę wyjścia z grzechu</li>
-                <li>Sekwencja przemiany zdrady Judasza (Y) w krew Krzyża (R)</li>
-                <li>Paciorki łącznikowe „M” i „J” w oprawie jubilerskiej</li>
+                <li>Przemiana zdrady Judasza (Y) w krew Krzyża (R)</li>
+                <li>Paciorki łącznikowe „M” i „J” w srebrnej oprawie</li>
               </ul>
             </div>
-            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów Model 2 na widokinaraj.pl &raquo;</a>
+            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów na widokinaraj.pl &raquo;</a>
           </div>
         </div>
       </div>
@@ -545,51 +800,49 @@
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- STRONA 6: MODELE 3 & 4 (RÓŻAŃCE DZIESIĄTKI) -->
-  <!-- =================================================================== -->
+  <!-- STRONA: MODELE 3 & 4 -->
   <div class="page">
     <div>
       <div class="page-header">
         <span>Kolekcja Różańców RHZ</span>
-        <span>Modele 3 & 4 &bull; Dziesiątki Okrągłe</span>
+        <span>Modele 3 & 4</span>
       </div>
 
-      <h2 class="section-title">Kompaktowe Dziesiątki Modlitewne</h2>
-      <h3 class="section-subtitle">Dyskretna modlitwa w drodze, pracy i podróży samochodem</h3>
+      <h2 class="section-title">Modele 3 i 4 Różańców</h2>
+      <h3 class="section-subtitle">Namacalne narzędzia modlitwy w kodzie barwnym RGB i CMYK</h3>
 
       <div class="pair-layout">
         <!-- Model 3 -->
         <div class="product-row-card">
-          <img src="images/model3_okragly_czarny.jpg" alt="Model 3">
+          <img src="images/model3_okragly_czarny.jpg" alt="Model 3: Okrągła Dziesiątka Czarna">
           <div class="product-row-info">
             <div>
-              <h4>Model 3: Okrągła Dziesiątka z Czarnym Krzyżem</h4>
-              <p>Zamknięta pętla modlitewna dziesiątki z hebanowym krzyżykiem. Znakomity do kieszeni garnituru, torebki lub na lusterko samochodowe.</p>
+              <h4>Model 3: Okrągła Dziesiątka Czarna</h4>
+              <p>Zamknięta pętla modlitewna z hebanowym krzyżykiem. Znakomity do kieszeni i do auta.</p>
               <ul>
                 <li>Pętla powracająca do kielicha przebaczenia</li>
-                <li>Odporne na ścieranie kamienie w kodzie barwnym</li>
-                <li>Solidne jubilerskie wiązanie na stalowej lince</li>
+                <li>Odporne kamienie w kodzie barwnym</li>
+                <li>Solidne wiązanie na stalowej lince jubilerskiej</li>
               </ul>
             </div>
-            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów Model 3 na widokinaraj.pl &raquo;</a>
+            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów na widokinaraj.pl &raquo;</a>
           </div>
         </div>
 
         <!-- Model 4 -->
         <div class="product-row-card">
-          <img src="images/model4_okragly_bialy.jpg" alt="Model 4">
+          <img src="images/model4_okragly_bialy.jpg" alt="Model 4: Okrągła Dziesiątka Biała">
           <div class="product-row-info">
             <div>
-              <h4>Model 4: Okrągła Dziesiątka z Białym Krzyżem</h4>
-              <p>Elegancka dziesiątka zwieńczona białym krzyżykiem z koralowca. Przypomnienie o czystości serca i nieustannej obecności Anioła Stróża.</p>
+              <h4>Model 4: Okrągła Dziesiątka Biała</h4>
+              <p>Elegancka dziesiątka zwieńczona białym krzyżykiem. Przypomnienie o czystości serca.</p>
               <ul>
                 <li>Sekwencja barw od ciemności CMY do światła RGB</li>
                 <li>Subtelna, lekka i poręczna konstrukcja</li>
                 <li>Idealny dar sakramentalny na bierzmowanie lub ślub</li>
               </ul>
             </div>
-            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów Model 4 na widokinaraj.pl &raquo;</a>
+            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów na widokinaraj.pl &raquo;</a>
           </div>
         </div>
       </div>
@@ -601,51 +854,49 @@
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- STRONA 7: MODELE 5 & 6 (RÓŻAŃCE-LINY) -->
-  <!-- =================================================================== -->
+  <!-- STRONA: MODELE 5 & 6 -->
   <div class="page">
     <div>
       <div class="page-header">
         <span>Kolekcja Różańców RHZ</span>
-        <span>Modele 5 & 6 &bull; Liny Modlitewne</span>
+        <span>Modele 5 & 6</span>
       </div>
 
-      <h2 class="section-title">Liny Modlitewne Pielgrzyma</h2>
-      <h3 class="section-subtitle">Tradycja monastyczna i prosta forma otwartego sznura</h3>
+      <h2 class="section-title">Modele 5 i 6 Różańców</h2>
+      <h3 class="section-subtitle">Namacalne narzędzia modlitwy w kodzie barwnym RGB i CMYK</h3>
 
       <div class="pair-layout">
         <!-- Model 5 -->
         <div class="product-row-card">
-          <img src="images/model5_lina_czarny.jpg" alt="Model 5">
+          <img src="images/model5_lina_czarny.jpg" alt="Model 5: Lina z Czarnym Krzyżem">
           <div class="product-row-info">
             <div>
-              <h4>Model 5: Różaniec-Lina z Czarnym Krzyżem</h4>
-              <p>Otwarta forma liny inspirowana czotkami mnichów z Góry Athos. Przypomina, że życie na ziemi jest nieustannym pielgrzymowaniem.</p>
+              <h4>Model 5: Lina z Czarnym Krzyżem</h4>
+              <p>Otwarta forma liny inspirowana czotkami mnichów. Pielgrzymi sznur modlitewny.</p>
               <ul>
-                <li>Czarne, gęsto plecione włókno spadochronowe</li>
-                <li>Krzyż z surowego drewna hebanowego</li>
-                <li>Niezwykła trwałość w każdych warunkach</li>
+                <li>Gęsto plecione, odporne włókno spadochronowe</li>
+                <li>Krzyż z surowego hebanu afrykańskiego</li>
+                <li>Niezwykła trwałość w trudnych warunkach</li>
               </ul>
             </div>
-            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów Model 5 na widokinaraj.pl &raquo;</a>
+            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów na widokinaraj.pl &raquo;</a>
           </div>
         </div>
 
         <!-- Model 6 -->
         <div class="product-row-card">
-          <img src="images/model6_lina_bialy.jpg" alt="Model 6">
+          <img src="images/model6_lina_bialy.jpg" alt="Model 6: Lina z Białym Krzyżem">
           <div class="product-row-info">
             <div>
-              <h4>Model 6: Różaniec-Lina z Białym Krzyżem</h4>
-              <p>Świetlista lina zakończona białym krzyżem. Symbol liny ocalenia rzuconej tonącemu człowiekowi przez Chrystusa Pana.</p>
+              <h4>Model 6: Lina z Białym Krzyżem</h4>
+              <p>Świetlista lina zakończona białym krzyżem Paruzji. Lina ocalenia rzucona człowiekowi.</p>
               <ul>
                 <li>Śnieżnobiały splot z barwnymi akcentami RGB</li>
-                <li>Biały krzyż Paruzji zwieńczający modlitwę</li>
+                <li>Biały krzyż Zmartwychwstania zwieńczający modlitwę</li>
                 <li>Ulubiony model młodzieży i ewangelizatorów</li>
               </ul>
             </div>
-            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów Model 6 na widokinaraj.pl &raquo;</a>
+            <a href="https://widokinaraj.pl" class="buy-btn-small">Zamów na widokinaraj.pl &raquo;</a>
           </div>
         </div>
       </div>
@@ -657,59 +908,55 @@
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- STRONA 8: PRAKTYKA, ŚWIADECTWO & SKLEP -->
-  <!-- =================================================================== -->
+  <!-- STRONA: ŚWIADECTWO I SKLEP -->
   <div class="page">
     <div>
       <div class="page-header">
-        <span>Zwieńczenie Drogi</span>
-        <span>Praktyka & Świadectwo</span>
+        <span>Świadectwo & Sklep</span>
+        <span>widokinaraj.pl</span>
       </div>
 
-      <h2 class="section-title">Owoce Wiary i Zamówienia</h2>
-      <h3 class="section-subtitle">Jak owocnie przeżywać modlitwę i dołączyć do wspólnoty RHZ365</h3>
+      <h2 class="section-title">Świadectwo Łaski i Zamówienia</h2>
+      <h3 class="section-subtitle">Osobista historia narodzin dzieła oraz kontakt z twórcami</h3>
 
-      <div class="card" style="border-left: 3px solid var(--gold); margin-bottom: 6px;">
-        <h4 style="font-size: 8pt; color: var(--navy-deep); margin-bottom: 2px;">
-          Cztery Kroki Codziennej Praktyki RHZ365
+      <div class="card" style="background: #fdfaf2; border: 1.5px solid var(--gold); margin-bottom: 5px;">
+        <h4 style="font-size: 10.5pt; color: var(--navy-deep); margin-bottom: 2px;">
+          ❤️ Świadectwo Dominika i Oli
         </h4>
-        <div style="font-size: 7.2pt; line-height: 1.35;">
-          <strong>1. Otwórz widokinaraj.pl:</strong> Przeczytaj lub odsłuchaj rozważanie dnia.<br>
-          <strong>2. Chwyć fizyczny różaniec:</strong> Dotykaj paciorków, medytując barwy Bożego planu.<br>
-          <strong>3. Módl się w intencji Kościoła i bliskich:</strong> Złącz swoje serce z historią zbawienia.<br>
-          <strong>4. Żyj w świetle:</strong> Nieś Bożą miłość (IN LOVE) do ludzi spotkanych w codzienności.
-        </div>
-      </div>
-
-      <div class="card" style="background: #f8fafc; border: 1px solid #cbd5e1; margin-bottom: 6px;">
-        <h4 style="font-size: 8pt; color: var(--navy-deep); margin-bottom: 2px;">
-          Świadectwo Autora i Oli – Modlitwa o Dar Potomstwa
-        </h4>
-        <p style="font-size: 7.2pt; font-style: italic; line-height: 1.35; margin: 0;">
-          „Dzieło to zrodziło się z głębokiej modlitwy o cud życia i dar potomstwa. W obliczu bezsilności medycyny, ufne zawierzenie Maryi i przejście przez tajemnice historii zbawienia przyniosło owoc pokoju, a następnie cud narodzin. Różaniec RHZ powstał po to, by nikt w swoich zmaganiach nie czuł się opuszczony.”
+        <p style="font-style: italic; line-height: 1.42; margin-bottom: 3px;">
+          „Dzieło to zrodziło się z głębokiej potrzeby serca i ufnej, wielomiesięcznej modlitwy o dar potomstwa. Doświadczenie Bożej wierności w najtrudniejszych chwilach stało się dla nas impulsem do stworzenia Różańca Historii Zbawienia. Chcemy zaświadczyć, że w Chrystusie nie ma sytuacji bez wyjścia, a ciemność zawsze ustępuje przed Światłością.”
+        </p>
+        <p style="font-size: calc(var(--base-font-size) * 0.9); color: var(--gold-dark); font-weight: 700; margin: 0; text-align: right;">
+          – Dominik i Ola, twórcy RHZ365 & WnR365
         </p>
       </div>
 
-      <div style="background: linear-gradient(135deg, #fefcf6 0%, #f7f1e1 100%); border: 1.5px solid var(--gold); border-radius: 5px; padding: 7px 10px; text-align: center;">
-        <h4 style="font-size: 8.5pt; color: var(--gold-dark); margin-bottom: 2px; text-transform: uppercase;">
-          Oficjalne Zamówienia Różańców i Książek
+      <div class="card" style="border-left: 3.5px solid var(--navy-deep); margin-bottom: 5px;">
+        <h4 style="font-size: 10.5pt; color: var(--navy-deep); margin-bottom: 2px;">
+          Oficjalny Sklep Dzieła: {{ website_url }}
         </h4>
-        <p style="font-size: 7.3pt; margin-bottom: 5px;">
-          Wszystkie modele różańców oraz tomy „Widoków na Raj” dostępne są bezpośrednio na stronie:
+        <p style="margin-bottom: 3px;">
+          Na naszej stronie zamówisz wszystkie 6 modeli różańców, tomy rozważań oraz pakiety podarunkowe:
         </p>
-        <a href="https://widokinaraj.pl" class="buy-btn-small" style="font-size: 7.5pt; padding: 4px 14px; align-self: center;">
-          Przejdź do sklepu: WWW.WIDOKINARAJ.PL &raquo;
-        </a>
+        <p style="font-size: calc(var(--base-font-size) * 0.92); margin: 0;">
+          &bull; <strong>Pakiety Formacyjne:</strong> Wybrany Różaniec RHZ + 4 Tomy „Widoków na Raj”.<br>
+          &bull; <strong>Eleganckie Welurowe Etui:</strong> Bezpieczne przechowywanie różańca.<br>
+          &bull; <strong>Certyfikat Autentyczności:</strong> Ręczne wykonanie w polskiej pracowni.
+        </p>
+      </div>
+
+      <div class="buy-card" style="margin: 0;">
+        <h4>Dołącz do Wspólnoty Modlitwy</h4>
+        <p>Zamów swój różaniec i zacznij całoroczną wędrówkę już dzisiaj.</p>
+        <a href="https://widokinaraj.pl" class="buy-btn" style="padding: 5px 16px;">Wejdź na widokinaraj.pl &raquo;</a>
       </div>
     </div>
 
     <div class="page-footer">
-      <span>{{ website_url }} &bull; Zostańcie z Bogiem!</span>
+      <span>{{ website_url }} &bull; NIECH BÓG CI BŁOGOSŁAWI!</span>
       <span class="page-num">8</span>
     </div>
   </div>
-
 </div>
 
 </body>

@@ -451,6 +451,21 @@
 
         <div class="section-label">Parametry Geometrii i Drukarni</div>
 
+        <!-- Regulacja wielkości czcionki -->
+        <div class="control-group">
+          <div class="control-label">
+            <span>Rozmiar czcionki (Font Size)</span>
+            <span id="fontSizeLabel" style="color:var(--gold);font-weight:700;">12 pt (Domyślny)</span>
+          </div>
+          <select id="fontSizeSelect" onchange="updateCustomSettings()">
+            <option value="10">10 pt (Bardzo zwarta)</option>
+            <option value="11">11 pt (Kompaktowa)</option>
+            <option value="12" selected>12 pt (Standardowa czytelna - zalecana)</option>
+            <option value="13">13 pt (Powiększona)</option>
+            <option value="14">14 pt (Duża - dla seniorów)</option>
+          </select>
+        </div>
+
         <!-- Liczba stron -->
         <div class="control-group">
           <div class="control-label">
@@ -605,10 +620,12 @@
       const pages = parseInt(document.getElementById('pageCountSelect').value);
       const bleed = parseFloat(document.getElementById('bleedSelect').value);
       const gutter = parseFloat(document.getElementById('gutterSelect').value);
+      const fontsize = parseFloat(document.getElementById('fontSizeSelect').value);
 
       document.getElementById('pageCountLabel').innerText = pages + ' stron';
       document.getElementById('bleedLabel').innerText = bleed.toFixed(1) + ' mm';
       document.getElementById('gutterLabel').innerText = gutter.toFixed(1) + ' mm';
+      document.getElementById('fontSizeLabel').innerText = fontsize + ' pt' + (fontsize === 12 ? ' (Zalecany)' : '');
 
       // Dimensions
       const totalW = (148 + (2 * bleed)).toFixed(1);
@@ -639,14 +656,15 @@
       const pages = document.getElementById('pageCountSelect').value;
       const bleed = document.getElementById('bleedSelect').value;
       const gutter = document.getElementById('gutterSelect').value;
+      const fontsize = document.getElementById('fontSizeSelect').value;
       const guides = document.getElementById('showGuidesCheckbox').checked ? '1' : '0';
       const website = encodeURIComponent(document.getElementById('websiteUrlInput').value);
 
       const iframe = document.getElementById('previewIframe');
       if (currentTab === 'interior') {
-        iframe.src = `preview.html?pages=${pages}&bleed=${bleed}&gutter=${gutter}&guides=${guides}&website=${website}`;
+        iframe.src = `preview.html?pages=${pages}&bleed=${bleed}&gutter=${gutter}&guides=${guides}&website=${website}&fontsize=${fontsize}`;
       } else {
-        iframe.src = `cover.html?pages=${pages}&bleed=${bleed}&guides=${guides}&website=${website}`;
+        iframe.src = `cover.html?pages=${pages}&bleed=${bleed}&guides=${guides}&website=${website}&fontsize=${fontsize}`;
       }
     }
 

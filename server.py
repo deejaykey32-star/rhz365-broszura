@@ -58,6 +58,7 @@ class GeneratorHandler(SimpleHTTPRequestHandler):
             gutter = float(query.get('gutter', ['0'])[0])
             show_guides = (query.get('guides', ['0'])[0] == '1')
             website = query.get('website', ['WWW.WIDOKINARAJ.PL'])[0]
+            font_size_pt = float(query.get('fontsize', ['12'])[0])
 
             self.send_response(200)
             self.send_header('Content-Type', 'text/html; charset=utf-8')
@@ -75,7 +76,8 @@ class GeneratorHandler(SimpleHTTPRequestHandler):
                     total_cover_height_mm=total_h,
                     show_guides=show_guides,
                     website_url=website,
-                    page_count=pages
+                    page_count=pages,
+                    font_size_pt=font_size_pt
                 )
             else:
                 # Interior
@@ -104,7 +106,8 @@ class GeneratorHandler(SimpleHTTPRequestHandler):
                     gutter_mm=gutter,
                     show_guides=show_guides,
                     website_url=website,
-                    page_count=pages
+                    page_count=pages,
+                    font_size_pt=font_size_pt
                 )
 
             self.wfile.write(rendered.encode('utf-8'))
@@ -166,7 +169,8 @@ class GeneratorHandler(SimpleHTTPRequestHandler):
             gutter = float(params.get('gutter', 0.0))
             website = params.get('website', 'WWW.WIDOKINARAJ.PL')
 
-            res = compile_pdf(doc_type, pages, bleed, gutter, website)
+            font_size = float(params.get('fontsize', 12.0))
+            res = compile_pdf(doc_type, pages, bleed, gutter, website, font_size)
 
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
@@ -183,11 +187,12 @@ class GeneratorHandler(SimpleHTTPRequestHandler):
             bleed = float(params.get('bleed', 3.175))
             gutter = float(params.get('gutter', 9.5))
             website = params.get('website', 'WWW.WIDOKINARAJ.PL')
+            font_size = float(params.get('fontsize', 12.0))
 
             # Compile interior
-            res_interior = compile_pdf('interior', pages, bleed, gutter, website)
+            res_interior = compile_pdf('interior', pages, bleed, gutter, website, font_size)
             # Compile cover
-            res_cover = compile_pdf('cover', pages, bleed, gutter, website)
+            res_cover = compile_pdf('cover', pages, bleed, gutter, website, font_size)
 
             zip_filename = f"Pakiet_Drukarski_RHZ365_{pages}stron.zip"
             zip_path = os.path.join(OUTPUT_DIR, zip_filename)
@@ -234,7 +239,7 @@ Wygenerowano automatycznie przez Generator Broszur RHZ365.
             }).encode('utf-8'))
             return
 
-def compile_pdf(doc_type, pages, bleed, gutter, website):
+def compile_pdf(doc_type, pages, bleed, gutter, website, font_size=12.0):
     if not BROWSER_PATH:
         return {"success": False, "error": "Nie znaleziono przeglądarki Chrome lub Edge do generowania PDF."}
 
@@ -251,7 +256,8 @@ def compile_pdf(doc_type, pages, bleed, gutter, website):
             total_cover_height_mm=total_h,
             show_guides=False,
             website_url=website,
-            page_count=pages
+            page_count=pages,
+            font_size_pt=font_size
         )
         out_name = f"RHZ365_Okladka_KDP_Spread_{pages}str.pdf"
     else:
@@ -280,7 +286,8 @@ def compile_pdf(doc_type, pages, bleed, gutter, website):
             gutter_mm=gutter,
             show_guides=False,
             website_url=website,
-            page_count=pages
+            page_count=pages,
+            font_size_pt=font_size
         )
         out_name = f"RHZ365_Wnetrze_A5_{pages}str.pdf"
 
